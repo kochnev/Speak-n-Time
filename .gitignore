@@ -1,0 +1,6 @@
+#virtualenv
+myenv/
+
+#python
+*.pyc
+__pycache__
