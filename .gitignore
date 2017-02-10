@@ -4,3 +4,5 @@ myenv/
 #python
 *.pyc
 __pycache__
+
+etc/*/logs/*
