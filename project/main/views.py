@@ -1,6 +1,8 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
+from django.core.urlresolvers import reverse
 
 from main.forms import UserForm, UserProfileForm
 # Create your views here.
@@ -8,34 +10,31 @@ from main.forms import UserForm, UserProfileForm
 def index(request):
     return render(request, 'main/index.html', {})
 
-#def signin(request):
-#    return render(request, 'main/signin.html', {})
 
-def signin(request):
-    message = ''
-    if request.method == "POST":
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            username = request.POST['username']
-            password = request.POST['password']
-            user = authenticate(username=username, password=password)
-            if user is not None:
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(username=username, password=password)
+        if user:
+            if user.is_active:
                 login(request, user)
-                return HttpResponseRedirect('/')
+                return HttpResponseRedirect(reverse('index'))
             else:
-                message = 'username or password are incorrect'
+                return HttpResponse("Your account is disabled")
+        else:
+            print("Invalid login details: {0}, {1}".format(username, password))
+            return HttpResponse("Invalid login details supplied.")
     else:
-        form = LoginForm()
-    return render(request, 'main/signin.html',{
-        'form': form,
-        'message':message,
-})
+        return render(request, 'main/login.html', {})
 
-def signup(request):
-        return render(request, 'main/signup.html', {})
+@login_required
+def user_logout(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('index'))
 
-
-# Create your views here.
+# registration view
 def register(request):
     # True when registration succeeds.
     registered = False
@@ -70,3 +69,28 @@ def register(request):
                   {'user_form': user_form,
                    'profile_form': profile_form,
                    'registered': registered})
+
+###############Old version#####################
+
+def signin(request):
+    message = ''
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = request.POST['username']
+            password = request.POST['password']
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return HttpResponseRedirect('/')
+            else:
+                message = 'username or password are incorrect'
+    else:
+        form = LoginForm()
+    return render(request, 'main/signin.html',{
+        'form': form,
+        'message':message,
+})
+
+def signup(request):
+        return render(request, 'main/signup.html', {})

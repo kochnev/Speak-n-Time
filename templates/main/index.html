@@ -6,7 +6,11 @@
 
 {% block content %}
    <div class="container">
-       <h1>Hello everyone!</h1>
+       {% if user.is_authenticated %}
+          <h1>Hello, {{ user.username}}!</h1>
+       {% else %}
+          <h1>Hello, whoever you are.</h1>
+       {% endif %}
    </div>
-   
+
 {% endblock %}

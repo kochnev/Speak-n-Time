@@ -33,8 +33,13 @@
               <li><a href="#">OFFICES</a></li>-->
   		</ul>
        <ul class="nav navbar-nav navbar-right">
-           <li><a href="#">Sign in</a></li>
-           <li><a href="{% url 'register' %}">Sign up</a></li>
+           {% if user.is_authenticated %}
+               <li>{{user.username}}</li>
+               <li><a href="{% url 'logout' %}">Log out</a></li>
+           {% else %}
+               <li><a href="{% url 'login' %}">Sign in</a></li>
+               <li><a href="{% url 'register' %}">Sign up</a></li>
+           {% endif %}
       </ul>
           <!--<ul class="nav navbar-nav navbar-right">
                   <li class="dropdown">
