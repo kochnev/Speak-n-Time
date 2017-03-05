@@ -10,6 +10,14 @@ from main.models import UserProfile
 def index(request):
     return render(request, 'main/index.html', {})
 
+
+@login_required
+def list_profiles(request):
+    userprofile_list = UserProfile.objects.all()
+
+    return render(request, 'main/list_profiles.html',
+        {'userprofile_list' : userprofile_list})
+
 @login_required
 def profile(request, username):
     try:

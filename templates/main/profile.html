@@ -5,7 +5,7 @@
 
 {% block content %}
 <h1>{{selecteduser.username}} Profile</h1>
-<img src="{{ MEDIA_URL }}" alt=""
+<img src="{{ MEDIA_URL }}{{userprofile.picture}}" alt=""
      width="300"
      height="300"
      alt="{{selecteduser.username}}">
