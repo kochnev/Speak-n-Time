@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.contrib.auth.models import User
 
 class Language(models.Model):
@@ -22,8 +23,8 @@ class UserProfile(models.Model):
 
     website = models.URLField(blank=True)
     picture = models.ImageField(upload_to='profile_images', blank=True)
-
-    languages = models.ManyToManyField(
+    birthday = models.DateField(blank=True, null=True)
+    language = models.ManyToManyField(
         Language,
         through='UserLanguage',
         related_name='native_language',
@@ -41,6 +42,15 @@ class UserProfile(models.Model):
     def __str__(self):
         """String for representing the Model object"""
         return self.user.username
+
+    def get_absolute_url(self):
+        """Returns the url to access a particular user profile"""
+
+        return reverse('profile', args=[str(self.user.username)])
+
+    def display_language(self):
+        """Creates a string for the list of language."""
+        return ', '.join([ lang.name for lang in self.language.all()[:3]])
 
 class UserLanguage(models.Model):
     """Model representing a ling between user and language"""
