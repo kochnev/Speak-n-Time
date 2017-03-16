@@ -8,7 +8,14 @@ from main.models import UserProfile
 # Create your views here.
 
 def index(request):
-    return render(request, 'main/index.html', {})
+    """View function for home page of site"""
+
+    num_users=User.objects.all().count()
+    return render(
+        request,
+        'main/index.html',
+        {'num_users':num_users},
+    )
 
 
 @login_required

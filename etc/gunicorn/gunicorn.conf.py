@@ -3,3 +3,4 @@ errorlog = '/Users/alex/Web/readyToSpeak/etc/gunicorn/logs/gunicorn-error.log'  
 accesslog = '/Users/alex/Web/readyToSpeak/etc/gunicorn/logs/gunicorn-access.log'
 loglevel = 'debug'
 workers = 3   # the number of recommended workers is '2 * number of CPUs + 1'
+reload = True
