@@ -3,6 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.views import generic
+
 from main.forms import UserProfileForm
 from main.models import UserProfile
 # Create your views here.
@@ -18,12 +20,17 @@ def index(request):
     )
 
 
-@login_required
+class UserProfileListView(generic.ListView):
+    model = UserProfile
+    paginate_by = 1
+
+'''@login_required
 def list_profiles(request):
     userprofile_list = UserProfile.objects.all()
 
     return render(request, 'main/list_profiles.html',
         {'userprofile_list' : userprofile_list})
+        '''
 
 @login_required
 def profile(request, username):
