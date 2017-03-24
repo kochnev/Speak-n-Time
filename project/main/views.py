@@ -13,16 +13,23 @@ def index(request):
     """View function for home page of site"""
 
     num_users=User.objects.all().count()
+
+    num_visits=request.session.get('num_visits', 0)
+    request.session['num_visits'] = num_visits + 1
+
     return render(
         request,
         'main/index.html',
-        {'num_users':num_users},
+        {
+         'num_users':num_users,
+         'num_visits':num_visits,
+        },
     )
 
 
 class UserProfileListView(generic.ListView):
     model = UserProfile
-    paginate_by = 1
+    paginate_by = 2
 
 '''@login_required
 def list_profiles(request):
@@ -40,7 +47,9 @@ def profile(request, username):
         return redirect('index')
     userprofile = UserProfile.objects.get_or_create(user=user)[0]
     form = UserProfileForm(
-    {'website': userprofile.website, 'picture': userprofile.picture})
+               {'website': userprofile.website,
+               'picture': userprofile.picture}
+               )
 
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES, instance=userprofile)
@@ -49,8 +58,12 @@ def profile(request, username):
             return redirect('profile', user.username)
         else:
             print(form.errors)
-    return render(request, 'main/profile.html',
-    {'userprofile': userprofile, 'selecteduser': user, 'form': form})
+    return render(request,
+                  'main/profile.html',
+                  {'userprofile': userprofile,
+                  'selecteduser': user,
+                  'form': form}
+                 )
 
 @login_required
 def register_profile(request):

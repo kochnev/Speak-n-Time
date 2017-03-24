@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 
+from project.dev_settings import *
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_BASE_DIR = os.path.dirname(BASE_DIR)
@@ -20,7 +22,7 @@ BASE_BASE_DIR = os.path.dirname(BASE_DIR)
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'n3px@&(72w%=#a95z7yoxze96_3_)_(l(obywpw#ll(+2qzob('
+SECRET_KEY = MY_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -103,8 +105,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'readytospeak',
-        'USER': 'admin',
-        'PASSWORD': '55405',
+        'USER': DATABASE_USER,
+        'PASSWORD': DATABASE_PASSWORD,
         'HOST': 'localhost',
         'PORT': '',
     }
@@ -152,3 +154,5 @@ STATIC_ROOT = os.path.join(BASE_BASE_DIR, 'static/')
 
 MEDIA_ROOT = os.path.join(BASE_BASE_DIR, 'media/')
 MEDIA_URL = '/media/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

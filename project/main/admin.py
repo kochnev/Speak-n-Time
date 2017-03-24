@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
+from django.contrib.sessions.models import Session
 from .models import UserProfile, Language, UserLanguage
 
 # Register your models here.
@@ -7,6 +8,13 @@ from .models import UserProfile, Language, UserLanguage
 #admin.site.register(Language)
 #admin.site.register(UserLanguage)
 admin.site.unregister(User)
+
+#admin.site.register(Session)
+@admin.register(Session)
+class SessionAdmin(admin.ModelAdmin):
+    def _session_data(self, obj):
+        return obj.get_decoded()
+    list_display = ['session_key', '_session_data', 'expire_date']
 
 class UserProfileInstanceInline(admin.StackedInline):
     model = UserProfile

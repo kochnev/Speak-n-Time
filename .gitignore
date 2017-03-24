@@ -5,5 +5,11 @@ myenv/
 *.pyc
 __pycache__
 
+#logs
 etc/*/logs/*
+
+#media files
 media/
+
+#dev
+project/project/dev_settings.py

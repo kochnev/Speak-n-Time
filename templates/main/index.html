@@ -13,7 +13,8 @@
        {% endif %}
        <ul>
           <li>Количество пользователей: {{num_users}}</li>
-       </ul>     
+       </ul>
+       <p>You have visited this page {{ num_visits }}{% if num_visits == 1 %} time{% else %} times{% endif %}.</p>
        <button class="btn btn-primary" id="mybtn">
           CLICK TEST
        </button>
