@@ -1,0 +1,13 @@
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Subject: Password reset on 127.0.0.1:9000
+From: webmaster@localhost
+To: lyotchik1@mail.ru
+Date: Fri, 24 Mar 2017 09:48:48 -0000
+Message-ID: <20170324094848.3989.87289@MacBook-Pro-Alexander.local>
+
+Someone asked for password reset for email lyotchik1@mail.ru. Follow the link below:
+http://127.0.0.1:9000/accounts/password/reset/confirm/Mg/4km-5bd20f7854595b4296dd/
+
+-------------------------------------------------------------------------------

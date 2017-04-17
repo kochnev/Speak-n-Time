@@ -155,4 +155,5 @@ STATIC_ROOT = os.path.join(BASE_BASE_DIR, 'static/')
 MEDIA_ROOT = os.path.join(BASE_BASE_DIR, 'media/')
 MEDIA_URL = '/media/'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH='/Users/alex/Web/readyToSpeak/etc/tmp/django-email-dev'
