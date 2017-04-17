@@ -7,6 +7,7 @@ __pycache__
 
 #logs
 etc/*/logs/*
+etc/tmp/
 
 #media files
 media/
