@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
@@ -41,28 +41,24 @@ def list_profiles(request):
 
 @login_required
 def profile(request, username):
-    try:
-        user = User.objects.get(username=username)
-    except User.DoesNotExist:
-        return redirect('index')
+    user=get_object_or_404(User, username=username)
     userprofile = UserProfile.objects.get_or_create(user=user)[0]
-    form = UserProfileForm(
-               {'website': userprofile.website,
-               'picture': userprofile.picture}
-               )
 
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES, instance=userprofile)
         if form.is_valid():
             form.save(commit=True)
             return redirect('profile', user.username)
-        else:
-            print(form.errors)
+    else:
+        form = UserProfileForm(instance=userprofile)
+
     return render(request,
                   'main/profile.html',
-                  {'userprofile': userprofile,
-                  'selecteduser': user,
-                  'form': form}
+                  {
+                      'userprofile': userprofile,
+                      'selecteduser': user,
+                      'form': form
+                  }
                  )
 
 @login_required
