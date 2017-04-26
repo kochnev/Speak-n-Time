@@ -7,6 +7,7 @@ from django.views import generic
 
 from main.forms import UserProfileForm
 from main.models import UserProfile
+
 # Create your views here.
 
 def index(request):

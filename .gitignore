@@ -14,3 +14,6 @@ media/
 
 #dev
 project/project/dev_settings.py
+
+#ide
+.idea/
