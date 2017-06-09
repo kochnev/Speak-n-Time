@@ -1,0 +1,24 @@
+{% extends "main/base.html" %}
+
+{% block title %}
+- the simpest way to find laguage partner
+{% endblock %}
+
+{% block content %}
+   <div class="container">
+       {% if user.is_authenticated %}
+          <h1>Hello, {{ user.username}}!</h1>
+       {% else %}
+          <h1>Hello, whoever you are.</h1>
+       {% endif %}
+       <ul>
+          <li>Количество пользователей: {{num_users}}</li>
+       </ul>
+       <p>You have visited this page {{ num_visits }}{% if num_visits == 1 %} time{% else %} times{% endif %}.</p>
+       <button class="btn btn-primary" id="mybtn">
+          CLICK TEST
+       </button>
+       <input type="date"></input>
+   </div>
+
+{% endblock %}
