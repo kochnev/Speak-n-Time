@@ -4,47 +4,38 @@ services:
     restart: always
     build: ./nginx/
     container_name: ng01
-    #build: ./nginx/
     ports:
       - "80:80"
     volumes:
       - ./web:/src
-      - ./nginx/sites-enabled:/etc/nginx/conf.d
-    #volumes:
-    #  - /www/static
-    #volumes_from:
-    #  - web
     links:
-      - web:web
+      - web
 
 
   web:
     restart: always
     build: ./web
     container_name: spnt01
-    ports:
-      - "8000:8000"
-    #expose:
-    #  - "8000"
+    expose:
+      - "8000"
     depends_on:
       - postgres
     volumes:
       - ./web:/src/
     links:
-      - postgres:postgres
-      #- /usr/src/app/static
+      - postgres
     env_file: .env
-    #environment:
-    #  DEBUG: 'true'
-    command: gunicorn project.wsgi:application -w 2 -b :8000
-
-
+    command: bash -c " python manage.py collectstatic --noinput &&
+                       python manage.py makemigrations &&
+                       python manage.py migrate &&
+                       gunicorn project.wsgi:application -w 2 -b :8000"
 
   postgres:
     restart: always
     image: postgres:latest
     container_name: db01
+    env_file: .env
     ports:
       - "5432:5432"
     #volumes:
-    # - pgdata:/var/lib/postgresql/data/
+     #- ./pgdata:/var/lib/postgresql/data/

@@ -1,19 +1,16 @@
-#virtualenv
-myenv/
 
 #python
 *.pyc
 __pycache__
 
-#logs
-etc/*/logs/*
-etc/tmp/
+#media and static files
+web/media/
+web/static/admin
 
-#media files
-media/
 
-#dev
-project/project/dev_settings.py
+#environment
+.env
+
 
 #ide
 .idea/
