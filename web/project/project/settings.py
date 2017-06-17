@@ -28,19 +28,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*',]
 
-# Registration settings
-# If True, users can register
-REGISTRATION_OPEN = True
-# One-week activation window; you may, of course, use a differant value.
-ACCOUNT_ACTIVATION_DAYS = 7
-# If True, the user will b automatically logged in.
-REGISTRATION_AUTO_LOGIN = True
-# The page you want users to arrive at after they successfully log in
-LOGIN_REDIRECT_URL = '/'
-# The page users are directed to If they are not logged in,
-# and are trying to access pages requiring AuthenticationMiddleware
-LOGIN_URL = '/accounts/login/'
-
 
 # Application definition
 
@@ -52,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main',
-    'registration',
+    'myregistration',
 ]
 
 MIDDLEWARE = [
@@ -72,7 +59,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-               os.path.join(BASE_DIR, 'templates'),
+               os.path.join(BASE_BASE_DIR, 'templates'),
 
         ],
         'APP_DIRS': True,
@@ -150,16 +137,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+STATIC_ROOT = os.path.join(BASE_BASE_DIR, 'static/')
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_ROOT = os.path.join(BASE_BASE_DIR, 'media/')
 MEDIA_URL = '/media/'
 
 #EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 #EMAIL_FILE_PATH='/Users/alex/Web/readyToSpeak/etc/tmp/django-email-dev'
-EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST='smtp.gmail.com'
+"""EMAIL_HOST='smtp.gmail.com'
 EMAIL_PORT=587
-EMAIL_HOST_USER = EMAIL_USER
-EMAIL_HOST_PASSWORD = EMAIL_PASSWORD
+EMAIL_HOST_USER = os.environ['EMAIL_USER']
+EMAIL_HOST_PASSWORD = os.environ['EMAIL_PASSWORD']
 EMAIL_USE_TLS=True
+"""

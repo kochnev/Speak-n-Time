@@ -25,7 +25,8 @@ services:
     links:
       - postgres
     env_file: .env
-    command: bash -c " python manage.py collectstatic --noinput &&
+    command: bash -c " cd project &&
+                       python manage.py collectstatic --noinput &&
                        python manage.py makemigrations &&
                        python manage.py migrate &&
                        gunicorn project.wsgi:application -w 2 -b :8000"
@@ -38,4 +39,4 @@ services:
     ports:
       - "5432:5432"
     #volumes:
-     #- ./pgdata:/var/lib/postgresql/data/
+    # - /tmp/pgdata:/var/lib/postgresql/
