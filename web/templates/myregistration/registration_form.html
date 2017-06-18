@@ -1,0 +1,14 @@
+{% extends "main/base.html" %}
+{% block content %}
+    {% if registered %}
+        Rango says: <strong>thank you for registering!</strong>
+        <a href="#">Return to the homepage.</a><br />
+    {% else %}
+        <h1>Register Here!</h1>
+        <form action="." method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Submit">
+        </form>
+    {% endif %}
+{% endblock content %}

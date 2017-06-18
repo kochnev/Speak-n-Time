@@ -1,12 +1,14 @@
 from django.contrib import admin
-from django.contrib.auth.models import User
-from django.contrib.sessions.models import Session
-from .models import UserProfile, Language, UserLanguage
+#from django.contrib.auth.models import User
+#from django.contrib.sessions.models import Session
+#from .models import UserProfile, Language, UserLanguage
 
 # Register your models here.
 #admin.site.register(UserProfile)
 #admin.site.register(Language)
 #admin.site.register(UserLanguage)
+
+'''
 admin.site.unregister(User)
 
 #admin.site.register(Session)
@@ -43,3 +45,4 @@ class UserProfileAdmin(admin.ModelAdmin):
 @admin.register(UserLanguage)
 class UserLanguageAdmin(admin.ModelAdmin):
     list_display = ('user_profile', 'language', 'native')
+'''

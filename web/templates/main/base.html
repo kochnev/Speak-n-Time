@@ -1,5 +1,7 @@
 <!DOCTYPE html>
+
 {% load staticfiles %}
+
 <html lang="en">
   <head>
     <title>Speak-n-Time {% block title %}{% endblock %}</title>
@@ -10,8 +12,8 @@
     <link rel="icon" href="{% static 'main/images/favicon.ico' %}">
     <!-- Bootstrap core CSS -->
   <!--  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">-->
-    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}"
-    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css.map' %}"
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css.map' %}">
 
     <!-- Custom styles for this template -->
     <link href="{% static 'main/css/dashboard.css' %}" rel="stylesheet">
@@ -28,20 +30,20 @@
         <ul class="navbar-nav mr-auto">
       {% if user.is_authenticated %}
           <li>
-              <a class="nav-link" href="{% url 'profile' user.username %}">{{user.username}}</a>
+              <a class="nav-link" href="#">{{user.username}}</a>
           </li>
           <li>
-              <a class="nav-link" href="{% url 'list_profiles' %}">Users</a>
+              <a class="nav-link" href="#">Users</a>
           </li>
           <li>
-              <a class="nav-link" href="#">Log out</a>
+              <a class="nav-link" href="{% url 'logout' %}">Log out</a>
           </li>
       {% else %}
           <li>
-              <a class="nav-link" href="#">Sign in</a>
+              <a class="nav-link" href="{% url 'login' %}">Sign in</a>
           </li>
           <li>
-              <a class="nav-link" href="#">Sign up</a>
+              <a class="nav-link" href="{% url 'register'%}">Sign up</a>
           </li>
       {% endif %}
         </ul>
@@ -97,8 +99,5 @@
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="{% static 'bootstrap/assets/js/ie10-viewport-bug-workaround.js'%}"></script>
 
-
-
-</script>
   </body>
 </html>
