@@ -23,22 +23,24 @@ def index(request):
         'main/index.html',
         {
          'num_users':num_users,
-         'num_visits':num_visits,
+         'num_visits':num_visits+1,
         },
     )
 
 
 class UserProfileListView(generic.ListView):
-    model = UserProfile
+    model = User
     paginate_by = 2
+    template_name = 'main/user_list.html'
 
-'''@login_required
+
+@login_required
 def list_profiles(request):
-    userprofile_list = UserProfile.objects.all()
+    userprofile_list = User.objects.all()
 
-    return render(request, 'main/list_profiles.html',
+    return render(request, 'main/userprofile_list.html',
         {'userprofile_list' : userprofile_list})
-        '''
+        
 '''
 @login_required
 def profile(request, username):

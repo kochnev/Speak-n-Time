@@ -24,11 +24,11 @@ class UserProfile(models.Model):
     website = models.URLField(blank=True)
     picture = models.ImageField(upload_to='profile_images', blank=True)
     birthday = models.DateField(blank=True, null=True)
-    language = models.ManyToManyField(
-        Language,
-        through='UserLanguage',
-        related_name='native_language',
-        help_text='Input language(e.g. english, russian, ukranian)')
+    #language = models.ManyToManyField(
+    #    Language,
+    #    through='UserLanguage',
+    #    related_name='native_language',
+    #    help_text='Input language(e.g. english, russian, ukranian)')
 
     # Override the __inicode__() method to return out something meaningful!
 
@@ -48,9 +48,9 @@ class UserProfile(models.Model):
 
         return reverse('profile', args=[str(self.user.username)])
 
-    def display_language(self):
-        """Creates a string for the list of language."""
-        return ', '.join([ lang.name for lang in self.language.all()[:3]])
+    #def display_language(self):
+    #    """Creates a string for the list of language."""
+    #    return ', '.join([ lang.name for lang in self.language.all()[:3]])
 
 class UserLanguage(models.Model):
     """Model representing a ling between user and language"""

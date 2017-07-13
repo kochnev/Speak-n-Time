@@ -8,15 +8,15 @@
 <h1>User Profiles</h1>
 
 <div class="panel">
-    {% if userprofile_list %}
+    {% if user_list %}
     <div class="panel-heading">
         <div class="panel-body">
             <div class="list-group">
-                {% for listuser in userprofile_list %}
+                {% for listuser in user_list %}
                 <div class="list-group-item">
                         <h4 class="list-group-item-heading">
-                            <a href="{% url 'profile' listuser.user.username %}">
-                             {{ listuser.user.username }}
+                            <a>
+                             {{ listuser.username }}
                             </a>
                         </h4>
                 </div>
