@@ -5,10 +5,11 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views import generic
 
-#from ..myregistration.forms import UserProfileForm
+from myregistration.forms import UserProfileForm
 from .models import UserProfile
 
 # Create your views here.
+
 
 def index(request):
     """View function for home page of site"""
@@ -29,19 +30,21 @@ def index(request):
 
 
 class UserProfileListView(generic.ListView):
-    model = User
-    paginate_by = 2
+    model = UserProfile
+   # paginate_by = 2
     template_name = 'main/user_list.html'
 
-
+'''
 @login_required
 def list_profiles(request):
     userprofile_list = User.objects.all()
 
     return render(request, 'main/userprofile_list.html',
         {'userprofile_list' : userprofile_list})
-        
+    
 '''
+
+
 @login_required
 def profile(request, username):
     user=get_object_or_404(User, username=username)
@@ -50,7 +53,8 @@ def profile(request, username):
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES, instance=userprofile)
         if form.is_valid():
-            form.save(commit=True)
+            form.save()
+
             return redirect('profile', user.username)
     else:
         form = UserProfileForm(instance=userprofile)
@@ -63,5 +67,15 @@ def profile(request, username):
                       'form': form
                   }
                  )
-'''
+
+@login_required
+def delete_profile(request, username):
+    user = User.objects.filter(username=username)
+    userprofile = UserProfile.objects.filter(user=user)
+
+    user.delete()
+    userprofile.delete()
+
+    return redirect('list_profiles')
+
 

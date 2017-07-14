@@ -15,8 +15,19 @@
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css.map' %}">
 
+      <!-- JQuery UI CSS ----------->
+      <link rel="stylesheet" href="{% static 'jquery/jquery-ui-1.12.1.custom/jquery-ui.css' %}">
+
+
     <!-- Custom styles for this template -->
     <link href="{% static 'main/css/dashboard.css' %}" rel="stylesheet">
+
+      <!-- JQuery js --->
+      <script src="{% static 'jquery/jquery-3.2.1.min.js' %}"></script>
+   <script src="{% static 'jquery/jquery-ui-1.12.1.custom/jquery-ui.js' %}"></script>
+
+
+     {% block script_before %}{% endblock script_before %}
   </head>
 
   <body>
@@ -30,7 +41,7 @@
         <ul class="navbar-nav mr-auto">
       {% if user.is_authenticated %}
           <li>
-              <a class="nav-link" href="#">{{user.username}}</a>
+              <a class="nav-link" href="{% url 'profile' user.username %}">{{user.username}}</a>
           </li>
           <li>
               <a class="nav-link" href="{% url 'list_profiles'%}">Users</a>
@@ -91,7 +102,7 @@
 
     <!-- Bootstrap core JavaScript ====================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="{% static 'jquery/jquery-3.1.1.slim.min.js'%}"></script>
+
     <script src="{% static 'ajax/tether.min.js'%}"></script>
     <script src="{% static 'bootstrap/js/bootstrap.min.js'%}"></script>
 
