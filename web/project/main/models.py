@@ -3,7 +3,6 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 
 class Language(models.Model):
-    """Model reprsenting a language (e.g Engilsh, Russian)"""
 
     name = models.CharField(max_length=50)
     code = models.CharField(max_length=2)
@@ -24,6 +23,7 @@ class UserProfile(models.Model):
     website = models.URLField(blank=True)
     picture = models.ImageField(upload_to='profile_images', blank=True)
     birthday = models.DateField(blank=True, null=True)
+
     languages = models.ManyToManyField(
         Language,
         through='UserLanguage',
@@ -55,7 +55,6 @@ class UserLanguage(models.Model):
     """Model representing a link between user and language"""
     user_profile = models.ForeignKey(UserProfile)
     language = models.ForeignKey(Language)
-   # native = models.BooleanField(default=False, blank=True)
 
     LEVEL = (
         ('A1', 'Beginner'),
@@ -64,13 +63,15 @@ class UserLanguage(models.Model):
         ('B2', 'Upper intermediate'),
         ('C1', 'Advanced'),
         ('C2', 'Proficient'),
+        ('N', 'Native'),
     )
 
-    level = models.CharField(max_length=2, choices=LEVEL, help_text='Choose your level', blank=True)
+    level = models.CharField(max_length=2, choices=LEVEL, help_text='Choose your level')
 
     def __str__(self):
         """String for representing the Model object"""
         return self.user_profile.user.username + ' ' + self.language.name
 
-    class Meta():
-        auto_created = True
+    #class Meta():
+    #    auto_created = True
+

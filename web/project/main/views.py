@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from django.views import generic
 
 from myregistration.forms import UserProfileForm
-from .models import UserProfile
+from .models import UserProfile, UserLanguage
 
 # Create your views here.
 
@@ -47,22 +47,28 @@ def list_profiles(request):
 
 @login_required
 def profile(request, username):
+    
     user=get_object_or_404(User, username=username)
-    userprofile = UserProfile.objects.get_or_create(user=user)[0]
+    user_profile = UserProfile.objects.get_or_create(user=user)[0]
 
     if request.method == 'POST':
-        form = UserProfileForm(request.POST, request.FILES, instance=userprofile)
+        form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
         if form.is_valid():
             form.save()
 
+            for lan in form.cleaned_data['languages'].all():
+                UserLanguage.objects.create(language=lan, user_profile=user_profile, level='A1')
+
+            form.save_m2m()
+
             return redirect('profile', user.username)
     else:
-        form = UserProfileForm(instance=userprofile)
+        form = UserProfileForm(instance=user_profile)
 
     return render(request,
                   'main/profile.html',
                   {
-                      'userprofile': userprofile,
+                      'userprofile': user_profile,
                       'selecteduser': user,
                       'form': form
                   }

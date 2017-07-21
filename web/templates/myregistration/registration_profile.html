@@ -3,6 +3,16 @@
 Registration - Step 2
 {% endblock title %}
 
+{% block script_before %}
+
+  <script>
+  $( function() {
+    $( "#id_birthday" ).datepicker({ dateFormat: 'dd/mm/yy' });
+  } );
+  </script>
+
+{% endblock script_before %}
+
 {% block content %}
 <h1>Registration - Step 2</h1>
 <form action="." enctype="multipart/form-data" method="post">
