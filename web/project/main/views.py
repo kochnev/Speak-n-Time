@@ -47,19 +47,18 @@ def list_profiles(request):
 
 @login_required
 def profile(request, username):
-    
     user=get_object_or_404(User, username=username)
     user_profile = UserProfile.objects.get_or_create(user=user)[0]
 
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
         if form.is_valid():
-            form.save()
-
+            new_object = form.save(commit=False)
+            new_object.save()
+            
+            UserLanguage.objects.filter(user_profile=user_profile).delete()
             for lan in form.cleaned_data['languages'].all():
                 UserLanguage.objects.create(language=lan, user_profile=user_profile, level='A1')
-
-            form.save_m2m()
 
             return redirect('profile', user.username)
     else:

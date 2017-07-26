@@ -1,3 +1,4 @@
+import datetime
 from django import forms
 from django.contrib.auth.models import User
 from main.models import UserProfile
@@ -10,7 +11,11 @@ class UserForm(forms.ModelForm):
         fields = ('username', 'email', 'password')
 
 class UserProfileForm(forms.ModelForm):
-    birthday = forms.DateField(input_formats=['%d/%m/%Y'])
+    current_date = datetime.datetime.now()
+    years_to_display = range(current_date.year - 100, current_date.year)
+                             
+    birthday = forms.DateField(widget=forms.SelectDateWidget(years=years_to_display),
+                    initial=current_date)
     class Meta:
         model = UserProfile
         exclude = ('user', )
