@@ -2,6 +2,17 @@ from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
 
+LEVEL = (
+    ('A1', 'Beginner'),
+    ('A2', 'Elementary'),
+    ('B1', 'Intermediate'),
+    ('B2', 'Upper intermediate'),
+    ('C1', 'Advanced'),
+    ('C2', 'Proficient'),
+    ('N', 'Native'),
+)
+
+
 class Language(models.Model):
 
     name = models.CharField(max_length=50)
@@ -55,16 +66,6 @@ class UserLanguage(models.Model):
     """Model representing a link between user and language"""
     user_profile = models.ForeignKey(UserProfile)
     language = models.ForeignKey(Language)
-
-    LEVEL = (
-        ('A1', 'Beginner'),
-        ('A2', 'Elementary'),
-        ('B1', 'Intermediate'),
-        ('B2', 'Upper intermediate'),
-        ('C1', 'Advanced'),
-        ('C2', 'Proficient'),
-        ('N', 'Native'),
-    )
 
     level = models.CharField(max_length=2, choices=LEVEL, help_text='Choose your level')
 

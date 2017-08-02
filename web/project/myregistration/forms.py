@@ -16,6 +16,12 @@ class UserProfileForm(forms.ModelForm):
                              
     birthday = forms.DateField(widget=forms.SelectDateWidget(years=years_to_display),
                     initial=current_date)
+
     class Meta:
         model = UserProfile
-        exclude = ('user', )
+        exclude = ('user', 'languages' )
+
+    def __init__(self, *args, **kwargs):
+        form = super(UserProfileForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'

@@ -4,9 +4,10 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views import generic
+from django.forms import inlineformset_factory
 
 from myregistration.forms import UserProfileForm
-from .models import UserProfile, UserLanguage
+from .models import UserProfile, UserLanguage, Language 
 
 # Create your views here.
 
@@ -49,25 +50,29 @@ def list_profiles(request):
 def profile(request, username):
     user=get_object_or_404(User, username=username)
     user_profile = UserProfile.objects.get_or_create(user=user)[0]
+    user_languages = UserLanguage.objects.filter(user_profile=user_profile)
+    
+    UserLanguageInlineFormSet = inlineformset_factory(UserProfile,
+                                                      UserLanguage,
+                                                      fields=('language','level'),
+                                                      extra=1, can_delete=True)
 
     if request.method == 'POST':
-        form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
-        if form.is_valid():
-            new_object = form.save(commit=False)
-            new_object.save()
-            
-            UserLanguage.objects.filter(user_profile=user_profile).delete()
-            for lan in form.cleaned_data['languages'].all():
-                UserLanguage.objects.create(language=lan, user_profile=user_profile, level='A1')
 
+        form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
+        formset = UserLanguageInlineFormSet(request.POST, request.FILES, instance=user_profile)
+        if form.is_valid() and formset.is_valid():
+            form.save()
+            formset.save()
             return redirect('profile', user.username)
     else:
         form = UserProfileForm(instance=user_profile)
-
+        formset = UserLanguageInlineFormSet(instance=user_profile)
     return render(request,
                   'main/profile.html',
                   {
                       'userprofile': user_profile,
+                      'formset': formset,
                       'selecteduser': user,
                       'form': form
                   }

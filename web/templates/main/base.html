@@ -11,40 +11,49 @@
     <meta name="author" content="">
     <link rel="icon" href="{% static 'main/images/favicon.ico' %}">
     <!-- Bootstrap core CSS -->
-  <!--  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">-->
-    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+
+   <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css.map' %}">
 
       <!-- JQuery UI CSS ----------->
-      <link rel="stylesheet" href="{% static 'jquery/jquery-ui-1.12.1.custom/jquery-ui.css' %}">
+    <link rel="stylesheet" href="{% static 'jquery/jquery-ui-1.12.1.custom/jquery-ui.css' %}">
 
 
     <!-- Custom styles for this template -->
-    <link href="{% static 'main/css/dashboard.css' %}" rel="stylesheet">
+   <!-- <link href="{% static 'main/css/dashboard.css' %}" rel="stylesheet">
 
       <!-- JQuery js --->
-      <script src="{% static 'jquery/jquery-3.2.1.min.js' %}"></script>
+     <script src="{% static 'jquery/jquery-3.2.1.min.js' %}"></script>
    <script src="{% static 'jquery/jquery-ui-1.12.1.custom/jquery-ui.js' %}"></script>
-
+   <script src="{% static 'js/jquery.formset.js'  %}"></script>
 
      {% block script_before %}{% endblock script_before %}
   </head>
 
   <body>
-    <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
-      <button class="navbar-toggler navbar-toggler-right hidden-lg-up" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+  <nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="/">Speak-n-time</a>
-
-      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-        <ul class="navbar-nav mr-auto">
-      {% if user.is_authenticated %}
-          <li>
-              <a class="nav-link" href="{% url 'profile' user.username %}">{{user.username}}</a>
-          </li>
+      <a class="navbar-brand" href="#">Speak-n-time</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        {% if user.is_authenticated %}
           <li>
               <a class="nav-link" href="{% url 'list_profiles'%}">Users</a>
+          </li>
+          {% endif %}
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        {% if user.is_authenticated %}
+           <li>
+              <a class="nav-link" href="{% url 'profile' user.username %}">{{user.username}}</a>
           </li>
           <li>
               <a class="nav-link" href="{% url 'logout' %}">Log out</a>
@@ -57,9 +66,11 @@
               <a class="nav-link" href="{% url 'register'%}">Sign up</a>
           </li>
       {% endif %}
-        </ul>
-      </div>
-    </nav>
+      </ul>
+    </div>
+  </div>
+</nav>
+
 
     <div class="container-fluid">
       <div class="row">
