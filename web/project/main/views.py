@@ -10,6 +10,16 @@ from myregistration.forms import UserProfileForm
 from .models import UserProfile, UserLanguage, Language 
 
 # Create your views here.
+from django.forms import BaseInlineFormSet
+
+
+class CustomInlineFormset(BaseInlineFormSet):
+    def __init__(self, *args, **kwargs):
+        super(CustomInlineFormset, self).__init__(*args, **kwargs)
+        for form in self.forms:
+            form.fields['language'].widget.attrs['class'] = 'form-control'
+            form.fields['level'].widget.attrs['class'] = 'form-control'
+
 
 
 def index(request):
@@ -55,6 +65,7 @@ def profile(request, username):
     UserLanguageInlineFormSet = inlineformset_factory(UserProfile,
                                                       UserLanguage,
                                                       fields=('language','level'),
+                                                      formset=CustomInlineFormset,
                                                       extra=1, can_delete=True)
 
     if request.method == 'POST':

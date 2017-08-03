@@ -120,6 +120,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+#DATETIME_FORMAT = 'd/m/Y'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/

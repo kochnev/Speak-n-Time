@@ -7,8 +7,10 @@
 
 <script>
   $( function() {
-    $( "#id_birthday" ).datepicker({ dateFormat: 'dd/mm/yy' });
+    $( "#id_birthday" ).datepicker({ dateFormat: 'yy-mm-dd' });
   } );
+
+
 
 
 
@@ -25,36 +27,43 @@
 
 
 
+
+
 </script>
 
 {% endblock script_before %}
 
 {% block content %}
-<h1>{{selecteduser.username}} Profile</h1>
-<div>
-<img src="{{ MEDIA_URL }}{{userprofile.picture}}" alt=""
-     width="300"
-     height="300"
-     alt="{{selecteduser.username}}">
-</div><br>
-<div>
-    {% if selecteduser.username == user.username %}
+<h1 align="center">{{selecteduser.username}} Profile</h1><br>
 
-    <form class="form-horizontal" action="." method="post" enctype="multipart/form-data" id="profile_form">
-        {% csrf_token %}
-        {{ form.non_field_errors }}
+{% if selecteduser.username == user.username %}
 
-        {% for field in form %}
-        <div class="form-group">
-            {{ field.errors }}
-            <label class="control-label col-sm-2" for="{{ field.id_for_label }}">{{field.name}}:</label>
-            <div class="col-sm-10">
-                {{field}}
-            </div>
+<form class="form-horizontal" action="." method="post" enctype="multipart/form-data" id="profile_form">
+
+    <div align="center" class="form-group"><img src="{{ MEDIA_URL }}{{userprofile.picture}}" alt=""
+                                                width="300"
+                                                height="300"
+                                                alt="{{selecteduser.username}}">
+    </div>
+    <div align="center" class="form-group">
+        <input type="file" name="picture" id="id_picture">
+    </div>
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    {% for field in form %}
+    {% if field.name != "picture" %}
+    <div class="form-group">
+        {{ field.errors }}
+        <label class="control-label col-sm-2" for="{{ field.id_for_label }}">{{field.name}}:</label>
+        <div class="col-sm-10">
+            {{field}}
         </div>
-        {% endfor %}
+    </div>
+    {% endif %}
+    {% endfor %}
 
-        <p>-----------Languages------------</p>
+    <div class="col-sm-offset-2 col-sm-10">
         <table border="0" cellpadding="0" cellspacing="0">
             {{ formset.management_form }}
             <tbody>
@@ -68,25 +77,28 @@
             {% endfor %}
             </tbody>
         </table>
+        <br>
+    </div>
 
-        <!--    {% for user_lan in user_languages%}
-               <p><label for="id_language">Language:</label>
-               <select name="language" id="id_language">
-                {% for lan in languages %}
-                   {% if lan.code == user_lan.language.code %}
-                        <option value={{lan.code}} selected>{{lan.name}}</option>
-                   {% else %}
-                        <option value={{lan.code}}>{{lan.name}}</option>
-                   {% endif %}
-                {% endfor %}
-                </select>
-            {% endfor %}-->
-
-        <input type="submit" name="save" value="Save">
-    </form>
-    {% else %}
-    <p><strong>Website:</strong> <a href="{{userprofile.website}}">{{userprofile.website}}</a></p>
-    {% endif %}
+    <!--    {% for user_lan in user_languages%}
+           <p><label for="id_language">Language:</label>
+           <select name="language" id="id_language">
+            {% for lan in languages %}
+               {% if lan.code == user_lan.language.code %}
+                    <option value={{lan.code}} selected>{{lan.name}}</option>
+               {% else %}
+                    <option value={{lan.code}}>{{lan.name}}</option>
+               {% endif %}
+            {% endfor %}
+            </select>
+        {% endfor %}-->
+    <div class="col-sm-offset-2 col-sm-10">
+        <input class="btn btn-default" type="submit" name="save" value="Save">
+    </div>
+</form>
+{% else %}
+<p><strong>Website:</strong> <a href="{{userprofile.website}}">{{userprofile.website}}</a></p>
+{% endif %}
 </div>
 <div id="edit_profile">
 
