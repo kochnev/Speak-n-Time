@@ -6,19 +6,10 @@ from django.core.urlresolvers import reverse
 from django.views import generic
 from django.forms import inlineformset_factory
 
-from myregistration.forms import UserProfileForm
+from myregistration.forms import UserProfileForm, CustomInlineFormset
 from .models import UserProfile, UserLanguage, Language 
 
 # Create your views here.
-from django.forms import BaseInlineFormSet
-
-
-class CustomInlineFormset(BaseInlineFormSet):
-    def __init__(self, *args, **kwargs):
-        super(CustomInlineFormset, self).__init__(*args, **kwargs)
-        for form in self.forms:
-            form.fields['language'].widget.attrs['class'] = 'form-control'
-            form.fields['level'].widget.attrs['class'] = 'form-control'
 
 
 

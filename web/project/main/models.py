@@ -1,6 +1,8 @@
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.utils import timezone
+
 
 LEVEL = (
     ('A1', 'Beginner'),
@@ -34,7 +36,7 @@ class UserProfile(models.Model):
     website = models.URLField(blank=True)
     picture = models.ImageField(upload_to='profile_images', blank=True)
     birthday = models.DateField(blank=True, null=True)
-
+    last_login = models.DateTimeField(default=timezone.now)
     languages = models.ManyToManyField(
         Language,
         through='UserLanguage',

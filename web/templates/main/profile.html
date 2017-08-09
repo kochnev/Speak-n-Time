@@ -1,5 +1,6 @@
 {% extends "main/base.html" %}
 {% load staticfiles %}
+{% load l10n %}
 
 {% block title %}{{selecteduser.username}}{% endblock title %}
 
@@ -37,7 +38,7 @@
 <h1 align="center">{{selecteduser.username}} Profile</h1><br>
 
 {% if selecteduser.username == user.username %}
-
+<p>{{userprofile.birthday}}</p>
 <form class="form-horizontal" action="." method="post" enctype="multipart/form-data" id="profile_form">
 
     <div align="center" class="form-group"><img src="{{ MEDIA_URL }}{{userprofile.picture}}" alt=""
