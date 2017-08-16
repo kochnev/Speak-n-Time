@@ -7,6 +7,7 @@ from django.views import generic
 from django.forms import inlineformset_factory
 
 from myregistration.forms import UserProfileForm, CustomInlineFormset
+from .forms import TimeZoneForm
 from .models import UserProfile, UserLanguage, Language 
 
 # Create your views here.
@@ -36,6 +37,7 @@ class UserProfileListView(generic.ListView):
    # paginate_by = 2
     template_name = 'main/user_list.html'
 
+
 '''
 @login_required
 def list_profiles(request):
@@ -49,7 +51,7 @@ def list_profiles(request):
 
 @login_required
 def profile(request, username):
-    user=get_object_or_404(User, username=username)
+    user = get_object_or_404(User, username=username)
     user_profile = UserProfile.objects.get_or_create(user=user)[0]
     user_languages = UserLanguage.objects.filter(user_profile=user_profile)
     
@@ -79,6 +81,30 @@ def profile(request, username):
                       'form': form
                   }
                  )
+
+
+
+@login_required
+def update_timezone(request):
+    user = request.user
+    user_profile = user.profile
+
+    if request.method == 'POST':
+
+        form = TimeZoneForm(request.POST, instance=user_profile)
+
+        if form.is_valid():
+            form.save()
+            return redirect('list_profiles')
+    else:
+        form = TimeZoneForm(instance=user_profile)
+    return render(request,
+                  'main/user_list.html',
+                  {
+                      'form': form,
+                      'userprofile_list': UserProfile
+                  }
+                  )
 
 @login_required
 def delete_profile(request, username):

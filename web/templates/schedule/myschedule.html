@@ -1,0 +1,69 @@
+{% extends "main/base.html" %}
+{% block script_before %}
+
+<script type="text/javascript">
+   $(function() {
+        $('#schedule_form tbody tr').formset({
+            prefix: '{{ formset.prefix }}'
+        });
+    })
+
+
+</script>
+
+{% endblock script_before %}
+
+{% block content %}
+<h1>My schedule</h1>
+
+<table class="table table-bordered">
+    <thead>
+      <tr>
+         {% for n, day in days_of_week %}
+            <th>{{day}}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in data %}
+      <tr>
+          {% for value in row %}
+             {% if value %}
+                <td>{{value.0}}-{{value.1}}</td>
+             {% else %}
+                <td></td>
+             {% endif%}
+          {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+<br>
+<form class="form-horizontal" action="." method="post" id="schedule_form">
+    {% csrf_token %}
+
+    <div class="col-sm-offset-2 col-sm-10">
+        <table border="0" cellpadding="0" cellspacing="0">
+            {{ formset.management_form }}
+            <tbody>
+
+            {% for form in formset %}
+            {{form.errors}}
+            <tr>
+                <td>{{ form.id }}</td>
+                <td>{{ form.day_of_week}}</td>
+                <td>{{ form.time_from }}</td>
+                <td>{{ form.time_to }}</td>
+                <td>{% if form.instance.pk %}{{ form.DELETE }}{% endif %}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <br>
+    </div>
+    <div class="col-sm-offset-2 col-sm-10">
+        <input class="btn btn-default" type="submit" name="save" value="Save">
+    </div>
+</form>
+{% endblock content %}

@@ -2,17 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.utils import timezone
-
-
-LEVEL = (
-    ('A1', 'Beginner'),
-    ('A2', 'Elementary'),
-    ('B1', 'Intermediate'),
-    ('B2', 'Upper intermediate'),
-    ('C1', 'Advanced'),
-    ('C2', 'Proficient'),
-    ('N', 'Native'),
-)
+import pytz
 
 
 class Language(models.Model):
@@ -29,7 +19,7 @@ class Language(models.Model):
 class UserProfile(models.Model):
     """Model representing a userprofile (additional info about user) """
     # This line is required. Links UserProfile to a User model instance.
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, related_name='profile')
 
     # The additional attributes we wish to include.
 
@@ -42,6 +32,10 @@ class UserProfile(models.Model):
         through='UserLanguage',
         help_text='Input language(e.g. english, russian, ukranian)')
 
+    timezone = models.CharField(
+        max_length=255,
+        choices=[(t,t) for t in pytz.common_timezones],
+        blank=True, null=True)
     # Override the __inicode__() method to return out something meaningful!
 
     GENDER = (
@@ -68,6 +62,16 @@ class UserLanguage(models.Model):
     """Model representing a link between user and language"""
     user_profile = models.ForeignKey(UserProfile)
     language = models.ForeignKey(Language)
+
+    LEVEL = (
+        ('A1', 'Beginner'),
+        ('A2', 'Elementary'),
+        ('B1', 'Intermediate'),
+        ('B2', 'Upper intermediate'),
+        ('C1', 'Advanced'),
+        ('C2', 'Proficient'),
+        ('N', 'Native'),
+    )
 
     level = models.CharField(max_length=2, choices=LEVEL, help_text='Choose your level')
 

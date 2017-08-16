@@ -1,4 +1,4 @@
-import datetime
+from django.utils import timezone
 from django import forms
 from django.forms import BaseInlineFormSet
 from django.contrib.auth.models import User
@@ -23,16 +23,17 @@ class UserForm(forms.ModelForm):
 
 
 class UserProfileForm(forms.ModelForm):
-    current_date = datetime.datetime.now()
+    current_date = timezone.now()
     years_to_display = range(current_date.year - 100, current_date.year)
                              
-    birthday = forms.DateField(widget=forms.SelectDateWidget(attrs=({'style': 'width: 33%; display: inline-block;'})))
+    birthday = forms.DateField(
+        widget=forms.SelectDateWidget(attrs=({'style': 'width: 33%; display: inline-block;'})))
     #forms.DateField(widget=forms.SelectDateWidget(years=years_to_display),
      #    initial=current_date)
 
     class Meta:
         model = UserProfile
-        fields = ('picture', 'last_login', 'website', 'birthday', 'gender' )
+        fields = ('picture', 'timezone', 'last_login', 'website', 'birthday', 'gender' )
 
     def __init__(self, *args, **kwargs):
         form = super(UserProfileForm, self).__init__(*args, **kwargs)

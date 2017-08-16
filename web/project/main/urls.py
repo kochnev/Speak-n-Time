@@ -8,5 +8,6 @@ urlpatterns = [
     url(r'^profiles/$', login_required(views.UserProfileListView.as_view()), name='list_profiles'),
     url(r'^profile/(?P<username>[\w\-]+)/$', views.profile, name='profile'),
     url(r'^delete_profile/(?P<username>[\w\-]+)/$', views.delete_profile, name='delete_profile'),
+    url(r'^profiles/update_timezone/$', views.update_timezone)
 
 ]

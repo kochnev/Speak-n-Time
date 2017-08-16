@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main',
     'myregistration',
+    'schedule',
+    'helper',
 #    'django_pdb'
 ]
 
@@ -51,6 +53,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'main.middleware.TimeZoneMiddleware',
+
 #   'django_pdb.middleware.PdbMiddleware',
 
 ]
@@ -72,6 +76,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
+
             ],
         },
     },
@@ -121,6 +126,14 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 DATE_FORMAT = 'd/m/Y'
+TIME_FORMAT = 'H:i'
+DATETIME_FORMAT = 'd/m/Y H:i:s'
+
+
+TIME_INPUT_FORMATS= [
+    '%H:%M',
+]
+
 DATE_INPUT_FORMATS = ['%d/%m/%Y',
     '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', # '2006-10-25', '10/25/2006', '10/25/06'
     '%b %d %Y', '%b %d, %Y',            # 'Oct 25 2006', 'Oct 25, 2006'
@@ -151,11 +164,11 @@ DATETIME_INPUT_FORMATS = [
 
 #LANGUAGE_CODE = 'en-US'
 
-#TIME_ZONE = 'UTC'
+TIME_ZONE = 'UTC'
 
 USE_I18N = False
 
-USE_L10N =  False
+USE_L10N = False
 
 USE_TZ = True
 

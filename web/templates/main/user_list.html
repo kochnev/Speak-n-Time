@@ -8,6 +8,11 @@
 <h1>User Profiles</h1>
 
 <div class="panel">
+    <div class="panel-heading" align="right">
+       <form class="form-horizontal" action="/update_timezone/" method="post"  id="timezone_form">
+           {{form}}
+       </form>
+    </div>
     {% if userprofile_list %}
     <div class="panel-heading">
         <div class="panel-body">
@@ -19,6 +24,7 @@
         <th>Birthday</th>
         <th>Website</th>
           <th>Gender</th>
+          <th>LastLogin</th>
       </tr>
     </thead>
                     <tbody>
@@ -39,6 +45,9 @@
                             </td>
                             <td>
                                 {{listuser.gender}}
+                            </td>
+                            <td>
+                                {{listuser.last_login}}
                             </td>
                         </tr>
 

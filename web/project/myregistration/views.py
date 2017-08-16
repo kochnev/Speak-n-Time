@@ -1,6 +1,8 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.utils import timezone
 from .forms import UserForm, UserProfileForm
 
 # Create your views here.
@@ -39,17 +41,23 @@ def register_profile(request):
     return render(request, 'myregistration/registration_profile.html', context_dict)
 
 def user_login(request):
+
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-
         user = authenticate(username=username, password=password)
         if user:
             if user.is_active:
                 login(request, user)
+                user.profile.last_login = timezone.now()
                 return redirect('index')
             else:
-                return HttpResponse("Your Speak-n-time account is disabled.")
+
+                messages.add_message(request, messages.ERROR, 'Пользователь заблокирован!')
+                return redirect('login')
+        else:
+            messages.add_message(request, messages.ERROR, 'Неверно введен логин или пароль!')
+            return redirect('login')
     else:
         return render(request, 'myregistration/login.html', {})
 

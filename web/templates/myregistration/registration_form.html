@@ -1,14 +1,25 @@
 {% extends "main/base.html" %}
+{% load render_form %}
 {% block content %}
-    {% if registered %}
-        Rango says: <strong>thank you for registering!</strong>
-        <a href="#">Return to the homepage.</a><br />
-    {% else %}
-        <h1>Register Here!</h1>
-        <form action="." method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Submit">
-        </form>
-    {% endif %}
+<h2>Registration</h2>
+<br><br>
+<form class="form-horizontal" action="." method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    {% for field in form %}
+        <div class="form-group">
+            {{ field.errors }}
+            <label class="control-label col-sm-2" for="{{ field.id_for_label }}">{{field.name|title}}:</label>
+            <div class="col-sm-10">
+                <input class="form-control" id="{{ field.id_for_label }}"
+                       maxlength="30" name="{{ field.html_name }}"
+                       value="{{ field.value|default_if_none:'' }}" type="{{field|fieldtype}}" />
+            </div>
+        </div>
+    {% endfor %}
+
+     <div class="col-sm-offset-2 col-sm-10">
+        <input class="btn btn-default" type="submit" name="submit" value="Submit">
+    </div>
+</form>
 {% endblock content %}
