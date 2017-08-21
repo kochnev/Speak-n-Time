@@ -4,6 +4,7 @@ from schedule.models import WeeklySchedule
 
 def pivot_schedule(user_schedule):
     """Pivot data for convenient table representation"""
+    #import pdb; pdb.set_trace()
 
     user_schedule_dict = defaultdict(list)
 

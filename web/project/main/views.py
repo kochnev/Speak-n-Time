@@ -8,6 +8,7 @@ from django.forms import inlineformset_factory
 
 from myregistration.forms import UserProfileForm, CustomInlineFormset
 from schedule.models import WeeklySchedule
+from schedule.utils import get_localize_schedule
 
 from helper.utils import pivot_schedule
 
@@ -104,7 +105,11 @@ def profile(request, username):
     user_languages = UserLanguage.objects.filter(user_profile=user_profile)
     weekly_schedule = WeeklySchedule.objects.filter(user_profile=user_profile)
 
-    user_schedule = weekly_schedule.values_list('day_of_week', 'time_from', 'time_to')
+    if request.user == user:
+        user_schedule = weekly_schedule.values_list('day_of_week', 'time_from', 'time_to')
+    else:
+        user_schedule = get_localize_schedule(user_profile)
+
     rows = pivot_schedule(user_schedule)
 
     return render(
