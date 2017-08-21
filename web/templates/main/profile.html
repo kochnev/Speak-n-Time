@@ -3,104 +3,52 @@
 
 {% block title %}{{selecteduser.username}}{% endblock title %}
 
-{% block script_before %}
-
-<script>
-  $( function() {
-    $( "#id_birthday" ).datepicker({ dateFormat: 'yy-mm-dd' });
-  } );
-
-
-
-
-
-
-</script>
-
-<script type="text/javascript">
-   $(function() {
-        $('#profile_form tbody tr').formset({
-            prefix: '{{ formset.prefix }}'
-        });
-    })
-
-
-
-
-
-
-</script>
-
-{% endblock script_before %}
-
 {% block content %}
-<h1 align="center">{{selecteduser.username}} Profile</h1><br>
-
 {% if selecteduser.username == user.username %}
-
-<form class="form-horizontal" action="." method="post" enctype="multipart/form-data" id="profile_form">
-
-    <div align="center" class="form-group"><img src="{{ MEDIA_URL }}{{userprofile.picture}}" alt=""
-                                                width="300"
-                                                height="300"
-                                                alt="{{selecteduser.username}}">
-    </div>
-    <div align="center" class="form-group">
-        <input type="file" name="picture" id="id_picture">
-    </div>
-    {% csrf_token %}
-    {{ form.non_field_errors }}
-
-    {% for field in form %}
-    {% if field.name != "picture" %}
-    <div class="form-group">
-        {{ field.errors }}
-        <label class="control-label col-sm-2" for="{{ field.id_for_label }}">{{field.name}}:</label>
-        <div class="col-sm-10">
-            {{field}}
+<a href="{% url 'edit_profile' selecteduser.username %}">Edit profile</a><br><br>
+{% endif %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6"><img src="{{ MEDIA_URL }}{{userprofile.picture}}" alt=""
+                                   width="300"
+                                   height="300"
+                                   alt="{{selecteduser.username}}">
+        </div>
+        <div class="col-md-6">
+            <h2>{{selecteduser.first_name}} {{selecteduser.last_name}}</h2>
+            <p><b>Timezone: </b>{{userprofile.timezone}}</p>
+            <p><b>Gender: </b>{{userprofile.get_gender_display}}</p>
+            <p><b>Website: </b>{{userprofile.website}}</p>
+            <p><b>Birthday: </b>{{userprofile.birthday}}</p>
+            <p><b>Languages:</b></p>
+            {% for user_lan in languages %}
+            <p> {{user_lan.language.name}} - {{user_lan.get_level_display}} </p>
+            {% endfor %}
         </div>
     </div>
-    {% endif %}
-    {% endfor %}
-
-    <div class="col-sm-offset-2 col-sm-10">
-        <table border="0" cellpadding="0" cellspacing="0">
-            {{ formset.management_form }}
-            <tbody>
-            {% for form in formset %}
+    <div class="row">
+        <table class="table table-bordered">
+            <thead>
             <tr>
-                <td>{% if form.instance.pk %}{{ form.DELETE }}{% endif %}</td>
-                <td>{{ form.language}}</td>
-                <td>{{ form.level }}</td>
-                <td>{{ form.id }}</td>
+                {% for n, day in days_of_week %}
+                <th>{{day}}</th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for row in data %}
+            <tr>
+                {% for value in row %}
+                {% if value %}
+                <td>{{value.0}}-{{value.1}}</td>
+                {% else %}
+                <td></td>
+                {% endif%}
+                {% endfor %}
             </tr>
             {% endfor %}
             </tbody>
         </table>
-        <br>
     </div>
-
-    <!--    {% for user_lan in user_languages%}
-           <p><label for="id_language">Language:</label>
-           <select name="language" id="id_language">
-            {% for lan in languages %}
-               {% if lan.code == user_lan.language.code %}
-                    <option value={{lan.code}} selected>{{lan.name}}</option>
-               {% else %}
-                    <option value={{lan.code}}>{{lan.name}}</option>
-               {% endif %}
-            {% endfor %}
-            </select>
-        {% endfor %}-->
-    <div class="col-sm-offset-2 col-sm-10">
-        <input class="btn btn-default" type="submit" name="save" value="Save">
-    </div>
-</form>
-{% else %}
-<p><strong>Website:</strong> <a href="{{userprofile.website}}">{{userprofile.website}}</a></p>
-{% endif %}
-</div>
-<div id="edit_profile">
-
 </div>
 {% endblock content %}

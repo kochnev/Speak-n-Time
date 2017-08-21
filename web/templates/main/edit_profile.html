@@ -1,0 +1,101 @@
+{% extends "main/base.html" %}
+{% load staticfiles %}
+
+{% block title %}{{selecteduser.username}}{% endblock title %}
+
+{% block script_before %}
+
+<script>
+  $( function() {
+    $( "#id_birthday" ).datepicker({ dateFormat: 'yy-mm-dd' });
+  } );
+
+</script>
+
+<script type="text/javascript">
+   $(function() {
+        $('#lan_table tbody tr').formset({
+            prefix: '{{ formset.prefix }}'
+        });
+
+         $('#sched_table tbody tr').formset({
+            prefix: '{{ formset.prefix }}'
+        });
+    })
+</script>
+
+{% endblock script_before %}
+
+{% block content %}
+<h1 align="center">{{selecteduser.username}} Profile</h1><br>
+
+<form class="form-horizontal" action="." method="post" enctype="multipart/form-data" id="profile_form">
+
+    <div align="center" class="form-group"><img src="{{ MEDIA_URL }}{{userprofile.picture}}" alt=""
+                                                width="300"
+                                                height="300"
+                                                alt="{{selecteduser.username}}">
+    </div>
+    <div align="center" class="form-group">
+        <input type="file" name="picture" id="id_picture">
+    </div>
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    {% for field in form %}
+    {% if field.name != "picture" %}
+    <div class="form-group">
+        {{ field.errors }}
+        <label class="control-label col-sm-2" for="{{ field.id_for_label }}">{{field.name}}:</label>
+        <div class="col-sm-10">
+            {{field}}
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+
+    <div class="col-sm-offset-2 col-sm-10">
+        <table border="0" cellpadding="0" cellspacing="0" id="lan_table">
+            {{ lan_formset.management_form }}
+            <tbody>
+            {% for form in lan_formset %}
+            <tr>
+                <td>{% if form.instance.pk %}{{ form.DELETE }}{% endif %}</td>
+                <td>{{ form.language}}</td>
+                <td>{{ form.level }}</td>
+                <td>{{ form.id }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <br>
+    </div>
+
+     <div class="col-sm-offset-2 col-sm-10">
+        <table border="0" cellpadding="0" cellspacing="0" id="sched_table">
+            {{ sched_formset.management_form }}
+            <tbody>
+
+            {% for form in sched_formset %}
+            {{form.errors}}
+            <tr>
+                <td>{{ form.id }}</td>
+                <td>{{ form.day_of_week}}</td>
+                <td>{{ form.time_from }}</td>
+                <td>{{ form.time_to }}</td>
+                <td>{% if form.instance.pk %}{{ form.DELETE }}{% endif %}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <br>
+    </div>
+    <div class="col-sm-offset-2 col-sm-10">
+        <input class="btn btn-default" type="submit" name="save" value="Save">
+    </div>
+</form>
+
+<div id="edit_profile">
+
+</div>
+{% endblock content %}
