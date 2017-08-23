@@ -15,9 +15,6 @@ from helper.utils import pivot_schedule
 from .forms import TimeZoneForm
 from .models import UserProfile, UserLanguage, Language 
 
-# Create your views here.
-
-
 
 def index(request):
     """View function for home page of site"""
@@ -41,17 +38,6 @@ class UserProfileListView(generic.ListView):
     model = UserProfile
    # paginate_by = 2
     template_name = 'main/user_list.html'
-
-
-'''
-@login_required
-def list_profiles(request):
-    userprofile_list = User.objects.all()
-
-    return render(request, 'main/userprofile_list.html',
-        {'userprofile_list' : userprofile_list})
-    
-'''
 
 
 @login_required
@@ -134,38 +120,5 @@ def profile(request, username):
                       'user_rows': user_rows,
                   }
     )
-
-
-@login_required
-def update_timezone(request):
-    user = request.user
-    user_profile = user.profile
-
-    if request.method == 'POST':
-
-        form = TimeZoneForm(request.POST, instance=user_profile)
-
-        if form.is_valid():
-            form.save()
-            return redirect('list_profiles')
-    else:
-        form = TimeZoneForm(instance=user_profile)
-    return render(request,
-                  'main/user_list.html',
-                  {
-                      'form': form,
-                      'userprofile_list': UserProfile
-                  }
-                  )
-
-@login_required
-def delete_profile(request, username):
-    user = User.objects.filter(username=username)
-    userprofile = UserProfile.objects.filter(user=user)
-
-    user.delete()
-    userprofile.delete()
-
-    return redirect('list_profiles')
 
 
