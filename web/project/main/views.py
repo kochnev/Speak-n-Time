@@ -100,27 +100,38 @@ def edit_profile(request, username):
 
 @login_required
 def profile(request, username):
-    user = get_object_or_404(User, username=username)
-    user_profile = UserProfile.objects.get_or_create(user=user)[0]
-    user_languages = UserLanguage.objects.filter(user_profile=user_profile)
+    selected_user = get_object_or_404(User, username=username)
+
+    sel_user_profile = UserProfile.objects.get_or_create(user=selected_user)[0]
+    sel_languages = UserLanguage.objects.filter(user_profile=sel_user_profile)
+    sel_weekly_schedule = WeeklySchedule.objects.filter(user_profile=sel_user_profile)
+
+    user = request.user
+    user_profile = UserProfile.objects.get_or_create(user=request.user)[0]
     weekly_schedule = WeeklySchedule.objects.filter(user_profile=user_profile)
 
-    if request.user == user:
-        user_schedule = weekly_schedule.values_list('day_of_week', 'time_from', 'time_to')
-    else:
-        user_schedule = get_localize_schedule(user_profile)
+    if selected_user == user:
+        sel_user_schedule = sel_weekly_schedule.values_list('day_of_week', 'time_from', 'time_to')
+        sel_user_rows = pivot_schedule(sel_user_schedule)
 
-    rows = pivot_schedule(user_schedule)
+        user_rows = ()
+    else:
+        sel_user_schedule = get_localize_schedule(sel_user_profile)
+        sel_user_rows = pivot_schedule(sel_user_schedule)
+
+        user_schedule = weekly_schedule.values_list('day_of_week', 'time_from', 'time_to')
+        user_rows = pivot_schedule(user_schedule)
 
     return render(
                   request,
                   'main/profile.html',
                   {
-                      'userprofile': user_profile,
-                      'selecteduser': user,
-                      'languages': user_languages,
+                      'userprofile': sel_user_profile,
+                      'selecteduser': selected_user,
+                      'languages': sel_languages,
                       'days_of_week': WeeklySchedule.DAY_OF_WEEK,
-                      'data': rows,
+                      'sel_user_rows': sel_user_rows,
+                      'user_rows': user_rows,
                   }
     )
 

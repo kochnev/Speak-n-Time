@@ -27,6 +27,10 @@ class UserProfile(models.Model):
     picture = models.ImageField(upload_to='profile_images', blank=True)
     birthday = models.DateField(blank=True, null=True)
     last_login = models.DateTimeField(default=timezone.now)
+   # skypename = models.CharField(max_length=255)
+   # video_link = models.CharField(max_length=255)
+    ##is_checked = models.BooleanField(default=False)
+
     languages = models.ManyToManyField(
         Language,
         through='UserLanguage',
@@ -81,4 +85,6 @@ class UserLanguage(models.Model):
 
     #class Meta():
     #    auto_created = True
+
+#class LanguagePartners
 
