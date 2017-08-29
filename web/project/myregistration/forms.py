@@ -33,7 +33,7 @@ class UserProfileForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        fields = ('picture', 'timezone', 'last_login', 'website', 'birthday', 'gender' )
+        fields = ('picture', 'video_link', 'timezone', 'last_login', 'website', 'birthday', 'gender' )
 
     def __init__(self, *args, **kwargs):
         form = super(UserProfileForm, self).__init__(*args, **kwargs)

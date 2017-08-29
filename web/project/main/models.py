@@ -28,7 +28,7 @@ class UserProfile(models.Model):
     birthday = models.DateField(blank=True, null=True)
     last_login = models.DateTimeField(default=timezone.now)
     #skypename = models.CharField(max_length=255)
-   # video_link = models.CharField(max_length=255)
+    video_link = models.CharField(max_length=255, blank=True)
     ##is_checked = models.BooleanField(default=False)
 
     languages = models.ManyToManyField(

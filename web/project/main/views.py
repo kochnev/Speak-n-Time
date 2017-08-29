@@ -47,15 +47,15 @@ def edit_profile(request, username):
     user_languages = UserLanguage.objects.filter(user_profile=user_profile)
     
     user_language_inline_form_set = inlineformset_factory(UserProfile,
-                                                      UserLanguage,
-                                                      fields=('language','level'),
-                                                      formset=CustomInlineFormset,
-                                                      extra=1, can_delete=True)
+                                                          UserLanguage,
+                                                          fields=('language','level'),
+                                                          formset=CustomInlineFormset,
+                                                          extra=1, can_delete=True)
 
     user_schedule_inline_form_set = inlineformset_factory(UserProfile,
-                                                      WeeklySchedule,
-                                                      fields=('day_of_week', 'time_from', 'time_to'),
-                                                      extra=1, can_delete=True)
+                                                          WeeklySchedule,
+                                                          fields=('day_of_week', 'time_from', 'time_to'),
+                                                          extra=1, can_delete=True)
 
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
