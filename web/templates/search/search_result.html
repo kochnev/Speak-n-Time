@@ -5,19 +5,66 @@
 
 {% block content %}
 <div class="container">
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>UserName</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for row in result_rows %}
-        <tr>
-            <td><a href="{% url 'profile' row.3 %}">{{row.3}}</a></td>
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    {% if partners %}
+    <div class="panel-heading">
+        <div class="panel-body">
+
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Birthday</th>
+                    <th>Website</th>
+                    <th>Gender</th>
+                    <th>LastLogin</th>
+                    <th>Intersection of schedules</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for p in partners %}
+
+
+                <tr>
+                    <td>
+                       <img src="{{ MEDIA_URL }}{{p.picture}}" alt=""
+                                   width="150"
+                                   height="150"
+                                   alt="{{p.user.username}}">
+
+                        <a href="{% url 'profile'  p.user.username %}">
+                            {% if p.user.last_name %}
+                               {{ p.user.last_name }} {{p.user.first_name}}
+                            {% else %}
+                               {{ p.user.username }}
+                            {% endif %}
+
+                        </a>
+                    </td>
+                    <td>
+                        {{p.birthday}}
+                    </td>
+                    <td>
+                        {{p.website}}
+                    </td>
+                    <td>
+                        {{p.gender}}
+                    </td>
+                    <td>
+                        {{p.last_login}}
+                    </td>
+                     <td>
+                        {{p.intersection_percent|floatformat}} %
+                    </td>
+                </tr>
+
+
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+    <p>There are no users in search result.</p>
+    {% endif %}
 </div>
 {% endblock content %}
