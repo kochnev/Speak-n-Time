@@ -4,10 +4,13 @@
 {% block title %}{{selecteduser.username}}{% endblock title %}
 
 {% block content %}
-{% if selecteduser.username == user.username %}
-<a href="{% url 'edit_profile' selecteduser.username %}">Edit profile</a><br><br>
-{% endif %}
+
 <div class="container">
+    {% if selecteduser.username == user.username %}
+    <a class="btn btn-default" href="{% url 'edit_profile' selecteduser.username %}">Edit profile</a>
+    <a class="btn btn-default" href="{% url 'my_schedule' user.username%}">My schedule</a>
+    <br><br>
+    {% endif %}
     <div class="row">
         <h2>{{selecteduser.first_name}} {{selecteduser.last_name}}</h2>
     </div>
@@ -45,7 +48,12 @@
             {% if selecteduser.username != user.username %}
             <li>
                 <a data-toggle="tab" href="#menu2">
-                     My schedule
+                    My schedule
+                </a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#menu3">
+                    Intersection
                 </a>
             </li>
             {% endif%}
@@ -86,6 +94,30 @@
                     </thead>
                     <tbody>
                     {% for row in user_rows %}
+                    <tr>
+                        {% for value in row %}
+                        {% if value %}
+                        <td>{{value.0}}-{{value.1}}</td>
+                        {% else %}
+                        <td></td>
+                        {% endif%}
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div id="menu3" class="tab-pane fade">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        {% for n, day in days_of_week %}
+                        <th>{{day}}</th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for row in intersection_rows %}
                     <tr>
                         {% for value in row %}
                         {% if value %}

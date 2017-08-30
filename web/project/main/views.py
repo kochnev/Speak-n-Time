@@ -1,14 +1,19 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db import connection
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views import generic
 from django.forms import inlineformset_factory
 
 from myregistration.forms import UserProfileForm, CustomInlineFormset
+
 from schedule.models import WeeklySchedule
 from schedule.utils import get_localize_schedule
+
+from search.sql import search_query_text
+from search.utils import  dictfetchall
 
 from helper.utils import pivot_schedule
 
@@ -101,12 +106,22 @@ def profile(request, username):
         sel_user_rows = pivot_schedule(sel_user_schedule)
 
         user_rows = ()
+        intersection_rows = ()
     else:
         sel_user_schedule = get_localize_schedule(sel_user_profile)
         sel_user_rows = pivot_schedule(sel_user_schedule)
 
         user_schedule = weekly_schedule.values_list('day_of_week', 'time_from', 'time_to')
         user_rows = pivot_schedule(user_schedule)
+
+        with connection.cursor() as cursor:
+            query_text = \
+                search_query_text.replace("{{clause}}", "AND u.id IN ('"+str(user.id)+"','"+str(selected_user.id)+"')")
+            cursor.execute(query_text, { 'userId': user.id })
+            row = dictfetchall(cursor)
+
+        intersection_schedule = [(r['day_of_week'],r['start_time'],r['end_time']) for r in row]
+        intersection_rows = pivot_schedule(intersection_schedule)
 
     return render(
                   request,
@@ -118,6 +133,7 @@ def profile(request, username):
                       'days_of_week': WeeklySchedule.DAY_OF_WEEK,
                       'sel_user_rows': sel_user_rows,
                       'user_rows': user_rows,
+                      'intersection_rows': intersection_rows,
                   }
     )
 

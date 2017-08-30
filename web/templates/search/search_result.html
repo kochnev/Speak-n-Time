@@ -1,0 +1,23 @@
+{% extends "main/base.html" %}
+{% load staticfiles %}
+
+{% block title %}Результаты поиска{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>UserName</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for row in result_rows %}
+        <tr>
+            <td><a href="{% url 'profile' row.3 %}">{{row.3}}</a></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}
