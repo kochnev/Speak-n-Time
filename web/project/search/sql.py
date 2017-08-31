@@ -3,33 +3,8 @@ search_query_text = """drop table if exists schedule_utc;
 CREATE TEMP TABLE schedule_utc AS
 select
      t.*,
-     CASE
-           WHEN t.dt_from_utc::date < current_timestamp::date THEN
-                CASE
-                    WHEN t.day_of_week=1 THEN 7
-                    ELSE t.day_of_week-1
-                END
-           WHEN t.dt_from_utc::date > current_timestamp::date THEN
-                 CASE
-                    WHEN t.day_of_week=7 THEN 1
-                    ELSE t.day_of_week+1
-                 END
-           ELSE t.day_of_week
-     END as  day_from,
-     CASE
-           WHEN t.dt_to_utc::date < current_timestamp::date THEN
-                CASE
-                    WHEN t.day_of_week=1 THEN 7
-                    ELSE t.day_of_week-1
-                END
-           WHEN t.dt_to_utc::date > current_timestamp::date THEN
-                 CASE
-                    WHEN t.day_of_week=7 THEN 1
-                    ELSE t.day_of_week+1
-                 END
-           ELSE t.day_of_week
-     END as  day_to
-
+     get_day_of_week(t.dt_from_utc::date, current_date, t.day_of_week) as  day_from,
+     get_day_of_week(t.dt_to_utc::date, current_date, t.day_of_week) as  day_to
 from
 (
     select
@@ -37,8 +12,8 @@ from
         u.username,
         upr.timezone,
         sch.day_of_week,
-        (current_timestamp::date + sch.time_from) at time zone upr.timezone as dt_from_utc,
-        (current_timestamp::date + sch.time_to) at time zone upr.timezone as dt_to_utc
+        (current_date + sch.time_from) at time zone upr.timezone as dt_from_utc,
+        (current_date + sch.time_to) at time zone upr.timezone as dt_to_utc
     from schedule_weeklyschedule sch
     join main_userprofile upr
          on sch.user_profile_id = upr.id
@@ -87,33 +62,8 @@ main_search_query_text="""drop table if exists schedule_utc;
 CREATE TEMP TABLE schedule_utc AS
 select
      t.*,
-     CASE
-           WHEN t.dt_from_utc::date < current_timestamp::date THEN
-                CASE
-                    WHEN t.day_of_week=1 THEN 7
-                    ELSE t.day_of_week-1
-                END
-           WHEN t.dt_from_utc::date > current_timestamp::date THEN
-                 CASE
-                    WHEN t.day_of_week=7 THEN 1
-                    ELSE t.day_of_week+1
-                 END
-           ELSE t.day_of_week
-     END as  day_from,
-     CASE
-           WHEN t.dt_to_utc::date < current_timestamp::date THEN
-                CASE
-                    WHEN t.day_of_week=1 THEN 7
-                    ELSE t.day_of_week-1
-                END
-           WHEN t.dt_to_utc::date > current_timestamp::date THEN
-                 CASE
-                    WHEN t.day_of_week=7 THEN 1
-                    ELSE t.day_of_week+1
-                 END
-           ELSE t.day_of_week
-     END as  day_to
-
+     get_day_of_week(t.dt_from_utc::date, current_date, t.day_of_week) as  day_from,
+     get_day_of_week(t.dt_to_utc::date, current_date, t.day_of_week) as  day_to
 from
 (
     select

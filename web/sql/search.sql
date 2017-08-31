@@ -1,4 +1,4 @@
-﻿﻿drop table if exists schedule_utc;
+﻿﻿ drop table if exists schedule_utc;
 --Сохраним во временную таблицу "нормализованную" таблицу с расписаниями
 CREATE TEMP TABLE schedule_utc AS
 select
@@ -85,10 +85,10 @@ from
         from
         (
         select  * from schedule_utc
-        where userId=71
+        where userId=68
         ) sch_user
         join schedule_utc sch_utc
-           on (sch_utc.day_from = sch_user.day_from and sch_utc.day_to = sch_user.day_to and sch_utc.userId <> 71)
+           on (sch_utc.day_from = sch_user.day_from and sch_utc.day_to = sch_user.day_to and sch_utc.userId <> 68)
         where
               (sch_user.dt_from_utc < sch_utc.dt_to_utc and sch_user.dt_to_utc > sch_utc.dt_from_utc)
     )t
@@ -103,20 +103,10 @@ join
     schedule_weeklyschedule wsch
     join main_userprofile upr
          on wsch.user_profile_id = upr.id
-    where  upr.user_id = 71
+    where  upr.user_id = 68
     group by upr.user_id
 )t2
  on t1.user_id = t2.user_id
 join main_userprofile upr
   on upr.user_id = t1.partner_id
 ;
-
-
-
-
-
-
-
-
-
-
