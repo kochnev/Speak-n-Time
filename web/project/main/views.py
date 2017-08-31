@@ -12,7 +12,6 @@ from myregistration.forms import UserProfileForm, CustomInlineFormset
 from schedule.models import WeeklySchedule
 from schedule.utils import get_localize_schedule
 
-from search.sql import search_query_text
 from search.utils import  dictfetchall
 
 from helper.utils import pivot_schedule
@@ -115,9 +114,7 @@ def profile(request, username):
         user_rows = pivot_schedule(user_schedule)
 
         with connection.cursor() as cursor:
-            query_text = \
-                search_query_text.replace("{{clause}}", "AND u.id IN ('"+str(user.id)+"','"+str(selected_user.id)+"')")
-            cursor.execute(query_text, { 'userId': user.id })
+            cursor.callproc('get_intersection',[user.id, selected_user.id])
             row = dictfetchall(cursor)
 
         intersection_schedule = [(r['day_of_week'],r['start_time'],r['end_time']) for r in row]
