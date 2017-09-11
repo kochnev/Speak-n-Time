@@ -1,70 +1,107 @@
 {% extends "main/base.html" %}
 {% load staticfiles %}
+{% load common_helper %}
 
 {% block title %}Результаты поиска{% endblock title %}
 
 {% block content %}
 <div class="container">
-    {% if partners %}
-    <div class="panel-heading">
-        <div class="panel-body">
+    <div class="col-md-3">
 
-            <table class="table table-bordered">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Birthday</th>
-                    <th>Website</th>
-                    <th>Gender</th>
-                    <th>LastLogin</th>
-                    <th>Intersection of schedules</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for p in partners %}
+        <form class="form-horizontal" action="." method="get">
+            <fieldset class="scheduler-border">
+                <legend class="scheduler-border">Search form</legend>
+                {% csrf_token %}
 
-
-                <tr>
-                    <td>
-                       <img src="{{ MEDIA_URL }}{{p.picture}}" alt=""
-                                   width="150"
-                                   height="150"
-                                   alt="{{p.user.username}}">
-
-                        <a href="{% url 'profile'  p.user.username %}">
-                            {% if p.user.last_name %}
-                               {{ p.user.last_name }} {{p.user.first_name}}
-                            {% else %}
-                               {{ p.user.username }}
-                            {% endif %}
-
-                        </a>
-                    </td>
-                    <td>
-                        {{p.birthday}}
-                    </td>
-                    <td>
-                        {{p.website}}
-                    </td>
-                    <td>
-                        {{p.gender}}
-                    </td>
-                    <td>
-                        {{p.last_login}}
-                    </td>
-                     <td>
-                        {{p.intersection_percent|floatformat}} %
-                    </td>
-                </tr>
-
-
+                {% for field in form %}
+                <div class="form-group">
+                    {{ field.errors }}
+                    <label class="control-label" for="{{ field.id_for_label }}">{{field.label}}:</label>
+                    {{field}}
+                </div>
                 {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                <div class="col-sm-offset-2 col-sm-10">
+                    <input class="btn btn-default" type="submit" name="search" value="Search">
+                </div>
+            </fieldset>
+        </form>
     </div>
-    {% else %}
-    <p>There are no users in search result.</p>
-    {% endif %}
+
+    <div class="col-md-9">
+        {% if partners %}
+        <div class="panel-heading">
+            <div class="panel-body">
+
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Birthday</th>
+                        <th>Website</th>
+                        <th>Gender</th>
+                        <th>LastLogin</th>
+                        {% if partners_dict %}
+                        <th>Intersection of schedules</th>
+                        {%endif%}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for p in partners %}
+
+
+                    <tr>
+                        <td>
+                            <img src="{{ MEDIA_URL }}{{p.picture}}" alt=""
+                                 width="150"
+                                 height="150"
+                                 alt="{{p.user.username}}">
+
+                            <a href="{% url 'profile'  p.user.username %}">
+                                {% if p.user.last_name %}
+                                {{ p.user.last_name }} {{p.user.first_name}}
+                                {% else %}
+                                {{ p.user.username }}
+                                {% endif %}
+
+                            </a>
+                        </td>
+                        <td>
+                            {{p.birthday}}
+                        </td>
+                        <td>
+                            {{p.website}}
+                        </td>
+                        <td>
+                            {{p.gender}}
+                        </td>
+                        <td>
+                            <b>Native:</b><br>
+                            {% for x in p.get_native_languages%}
+                            <p>{{x.language}}
+                            <p>
+                                {%endfor%}
+                                <b>Learning:</b>
+                                {% for x in p.get_learning_languages%}
+                            <p>{{x.language}}
+                            <p>
+                                {%endfor%}
+                        </td>
+                        {% if partners_dict %}
+                        <td>
+                            {{ partners_dict|get_item:p.id }} %
+                        </td>
+                        {%endif%}
+                    </tr>
+
+
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% else %}
+        <p>There are no users in search result.</p>
+        {% endif %}
+    </div>
 </div>
 {% endblock content %}

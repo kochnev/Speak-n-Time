@@ -13,7 +13,7 @@ from schedule.models import WeeklySchedule
 from schedule.utils import get_localize_schedule
 
 from search.utils import  dictfetchall
-
+from search.sql import main_search_query_text
 from helper.utils import pivot_schedule
 
 from .forms import TimeZoneForm
@@ -38,10 +38,10 @@ def index(request):
     )
 
 
-class UserProfileListView(generic.ListView):
-    model = UserProfile
+#class UserProfileListView(generic.ListView):
+ #   model = UserProfile
    # paginate_by = 2
-    template_name = 'main/user_list.html'
+ #   template_name = 'main/user_list.html'
 
 
 @login_required
@@ -100,12 +100,14 @@ def profile(request, username):
     user_profile = UserProfile.objects.get_or_create(user=request.user)[0]
     weekly_schedule = WeeklySchedule.objects.filter(user_profile=user_profile)
 
+    user_rows = ()
+    intersection_rows = ()
+    intersection_percent = None
+
     if selected_user == user:
         sel_user_schedule = sel_weekly_schedule.values_list('day_of_week', 'time_from', 'time_to')
         sel_user_rows = pivot_schedule(sel_user_schedule)
 
-        user_rows = ()
-        intersection_rows = ()
     else:
         sel_user_schedule = get_localize_schedule(sel_user_profile)
         sel_user_rows = pivot_schedule(sel_user_schedule)
@@ -114,8 +116,18 @@ def profile(request, username):
         user_rows = pivot_schedule(user_schedule)
 
         with connection.cursor() as cursor:
-            cursor.callproc('get_intersection',[user.id, selected_user.id])
+            cursor.callproc('get_intersection_detail',[user.id, selected_user.id])
             row = dictfetchall(cursor)
+
+
+            intersection_raw = UserProfile.objects.raw(main_search_query_text,
+                                              {
+                                               'userId': user.id,
+                                               'partnerId': selected_user.id
+                                              }
+                                              )
+            if len(list(intersection_raw))>0:
+                intersection_percent = intersection_raw[0].intersection_percent
 
         intersection_schedule = [(r['day_of_week'],r['start_time'],r['end_time']) for r in row]
         intersection_rows = pivot_schedule(intersection_schedule)
@@ -131,6 +143,7 @@ def profile(request, username):
                       'sel_user_rows': sel_user_rows,
                       'user_rows': user_rows,
                       'intersection_rows': intersection_rows,
+                      'intersection_percent': intersection_percent,
                   }
     )
 

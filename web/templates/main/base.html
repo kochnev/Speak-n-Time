@@ -40,14 +40,11 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Speak-n-time</a>
+            <a class="navbar-brand" href="{% url 'index' %}">Speak-n-time</a>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
                 {% if user.is_authenticated %}
-                <li>
-                    <a class="nav-link" href="{% url 'list_profiles'%}">Users</a>
-                </li>
                 <li>
                     <a class="nav-link" href="{% url 'search'%}">Search</a>
                 </li>

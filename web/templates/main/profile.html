@@ -6,19 +6,23 @@
 {% block content %}
 
 <div class="container">
-    {% if selecteduser.username == user.username %}
-    <a class="btn btn-default" href="{% url 'edit_profile' selecteduser.username %}">Edit profile</a>
-    <a class="btn btn-default" href="{% url 'my_schedule' user.username%}">My schedule</a>
-    <br><br>
-    {% endif %}
+
     <div class="row">
         <h2>{{selecteduser.first_name}} {{selecteduser.last_name}}</h2>
     </div>
     <div class="row">
-        <div class="col-md-3"><img src="{{ MEDIA_URL }}{{userprofile.picture}}" alt=""
-                                   width="150"
-                                   height="150"
-                                   alt="{{selecteduser.username}}">
+        <div class="col-md-3">
+            <div>
+                <img src="{{ MEDIA_URL }}{{userprofile.picture}}" alt=""
+                     width="150"
+                     height="150"
+                     alt="{{selecteduser.username}}">
+            </div>
+            {% if selecteduser.username == user.username %}
+            <a class="btn btn-default" href="{% url 'edit_profile' selecteduser.username %}">Edit profile</a>
+            <a class="btn btn-default" href="{% url 'my_schedule' user.username%}">Edit schedule</a>
+            <br><br>
+            {% endif %}
         </div>
         <div class="col-md-3">
             <p><b>Timezone: </b>{{userprofile.timezone}}</p>
@@ -39,6 +43,9 @@
 
 
     <div class="row">
+        {% if intersection_percent %}
+        <h3>Schedule's intersection is {{intersection_percent|floatformat}}%</h3>
+        {% endif%}
         <ul class="nav nav-tabs">
             <li class="active">
                 <a data-toggle="tab" href="#menu1">

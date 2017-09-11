@@ -58,6 +58,14 @@ class UserProfile(models.Model):
 
         return reverse('profile', args=[str(self.user.username)])
 
+    def get_native_languages(self):
+        """Returns list of user's native languages"""
+        return self.userlanguage_set.filter(level='N')
+
+    def get_learning_languages(self):
+        """Returns list of languages which user are learning"""
+        return self.userlanguage_set.exclude(level='N')
+
     #def display_language(self):
     #    """Creates a string for the list of language."""
     #    return ', '.join([ lang.name for lang in self.language.all()[:3]])
@@ -85,6 +93,7 @@ class UserLanguage(models.Model):
 
     #class Meta():
     #    auto_created = True
+
 
 #class LanguagePartners(models.Model):
     """Model representing info if two users are language partner"""
