@@ -22,6 +22,8 @@
             <a class="btn btn-default" href="{% url 'edit_profile' selecteduser.username %}">Edit profile</a>
             <a class="btn btn-default" href="{% url 'my_schedule' user.username%}">Edit schedule</a>
             <br><br>
+            {% else %}
+            <a class="btn btn-default" href="{% url 'friendship_create_request' selecteduser.username %}">Add to friends</a>
             {% endif %}
         </div>
         <div class="col-md-3">

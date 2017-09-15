@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'myregistration',
     'schedule',
     'helper',
-#    'django_pdb'
+    'messages_spnt',
+    'friendship',
 ]
 
 MIDDLEWARE = [
