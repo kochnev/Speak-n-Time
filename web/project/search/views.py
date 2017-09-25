@@ -15,11 +15,16 @@ def search(request):
 
     #if len = 0 then search by default (rendering form and first auto search)
     if len(request.GET) == 0:
-        is_use_intersection = 'on'
+
+        #is_use_intersection = 'on'
+        is_use_intersection = None
         gender = None
         #берем первый изучаемый язык, в будущем добавить признак основной изучаемый
-        native_language = user_profile.get_learning_languages()[0].language_id
-        learning_language = user_profile.get_native_languages()[0].language_id
+        native_language = None
+        learning_language = None
+
+        #native_language = user_profile.get_learning_languages()[0].language_id
+        #learning_language = user_profile.get_native_languages()[0].language_id
 
         form = SearchForm({'is_use_intersection': is_use_intersection,
                            'native_language': native_language,

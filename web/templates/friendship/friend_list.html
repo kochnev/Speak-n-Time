@@ -1,0 +1,64 @@
+{% extends "main/base.html" %}
+
+{% block title %}
+- the simpest way to find laguage partner
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h2>Friends</h2>
+    {% if requests %}
+    <div class="row">
+        <ul>
+            {% for friendship_request in requests %}
+            <li>{{ friendship_request.from_user }} to {{ friendship_request.to_user }} <a
+                    href="{% url 'friendship_request_detail' friendship_request.id %}">view</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% if friend_list %}
+    <div class="row">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Birthday</th>
+                <th>Website</th>
+                <th>Gender</th>
+                <th>LastLogin</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for friend in friend_list %}
+            <tr>
+                <td>
+                    <a href="{% url 'profile'  friend.username %}">
+                        {{ friend.username }}
+                    </a>
+                </td>
+                <td>
+                    {{friend.profile.birthday}}
+                </td>
+                <td>
+                    {{friend.profile.website}}
+                </td>
+                <td>
+                    {{friend.profile.gender}}
+                </td>
+                <td>
+                    {{friend.profile.last_login}}
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>There are no friends yet :(</p>
+    {% endif %}
+</div>
+
+{% endblock %}
+

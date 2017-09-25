@@ -1,5 +1,6 @@
 {% extends "main/base.html" %}
 {% load staticfiles %}
+{% load friendshiptags %}
 
 {% block title %}{{selecteduser.username}}{% endblock title %}
 
@@ -23,7 +24,19 @@
             <a class="btn btn-default" href="{% url 'my_schedule' user.username%}">Edit schedule</a>
             <br><br>
             {% else %}
-            <a class="btn btn-default" href="{% url 'friendship_create_request' selecteduser.username %}">Add to friends</a>
+            {% are_friends selecteduser user as is_friend%}
+            {% get_friendship_request_id selecteduser user as friendship_request_id%}
+            {% if friendship_request_id %}
+             <form action="{% url 'friendship_cancel' friendship_request_id selecteduser.username%}" method="post">
+                 {% csrf_token %}
+                 <input type="submit" value="Cancel friend request" class="btn btn-danger">
+            </form>
+            {% elif is_friend == False %}
+            <form action="{% url 'friendship_create_request' selecteduser.username %}" method="post">
+                 {% csrf_token %}
+                <input type="submit" value="Add to friend" class="btn btn-success">
+            </form>
+            {% endif %}
             {% endif %}
         </div>
         <div class="col-md-3">

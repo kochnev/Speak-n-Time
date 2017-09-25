@@ -5,22 +5,27 @@ from django.core.exceptions import ValidationError
 from friendship.exceptions import AlreadyFriendsError
 
 
-class FriendshipManager(models.Manager):
-    """ Friendship manager """
+class FriendshipRequestManager(models.Manager):
+    """ Friendshiprequest manager """
 
-    def friends(self, user):
-        """ Return a list of all friends """
-        qs = Friendship.objects.seleсted_related('from_user', 'to_user').filter(to_user=user).all()
-        friends = [u.from_user for u in qs]
-
-        return friends
-
-    def requests(self, user):
+    def active_requests(self, user):
         """ Return a list of friendship requests """
-        qs = FriendshipRequest.objects.select_related('from_user', 'to_user').filter(to_user=user).all()
+        qs = FriendshipRequest.objects.select_related('from_user', 'to_user').filter(rejected__isnull=True).\
+            filter(to_user=user).all()
         requests = list(qs)
 
         return requests
+
+    def get_friendship_request_id(self, to_user, from_user):
+        """Is there friend request between user1 and user2"""
+        try:
+            return FriendshipRequest.objects.select_related('from_user', 'to_user'). \
+                filter(to_user=to_user, from_user=from_user).get(rejected__isnull=True).id
+        except FriendshipRequest.DoesNotExist:
+            return None
+
+
+
 
     def sent_requests(self, user):
         """ Return a list of friendship requests from user """
@@ -28,6 +33,17 @@ class FriendshipManager(models.Manager):
         requests = list(qs)
 
         return requests
+
+class FriendshipManager(models.Manager):
+    """ Friendship manager """
+
+    def friends(self, user):
+        """ Return a list of all friends """
+        qs = Friendship.objects.select_related('from_user', 'to_user').filter(to_user=user).all()
+        friends = [u.from_user for u in qs]
+
+        return friends
+
 
     def add_friend(self, from_user, to_user, message=None):
         """ Create a friendship request """
@@ -89,7 +105,7 @@ class Friendship(models.Model):
 
 class FriendshipRequest(models.Model):
     """ Model to represent friendship requests """
-    from_user = models.ForeignKey(User, related_name='friendship_requests_set')
+    from_user = models.ForeignKey(User, related_name='friendship_requests_sent')
     to_user = models.ForeignKey(User, related_name='friendship_requests_received')
 
     message = models.TextField(blank=True)
@@ -97,6 +113,8 @@ class FriendshipRequest(models.Model):
     created = models.DateTimeField(default=timezone.now)
     rejected = models.DateTimeField(blank=True, null=True)
     viewed = models.DateTimeField(blank=True, null=True)
+
+    objects = FriendshipRequestManager()
 
     class Meta:
         verbose_name = 'Friendship Request'
