@@ -7,20 +7,86 @@
 {% block content %}
 
 <div class="container">
-    <h2>Friends</h2>
+
     {% if requests %}
-    <div class="row">
-        <ul>
-            {% for friendship_request in requests %}
-            <li>{{ friendship_request.from_user }} to {{ friendship_request.to_user }} <a
-                    href="{% url 'friendship_request_detail' friendship_request.id %}">view</a></li>
-            {% endfor %}
-        </ul>
-    </div>
+        <div class="row">
+            <div class="panel panel-info">
+                <div class="panel-heading">Friend requests</div>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Birthday</th>
+                        <th>Website</th>
+                        <th>Gender</th>
+                        <th>LastLogin</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                       {% for f_request in requests %}
+                            <tr>
+                                <td>
+                                    <img src="{{ MEDIA_URL }}{{f_request.from_user.profile.picture}}" alt=""
+                                         width="150"
+                                         height="150"
+                                         alt="{{f_request.from_user.username}}">
+
+                                    <a href="{% url 'profile'  f_request.from_user.username %}">
+                                        {% if f_request.from_user.last_name %}
+                                        {{ f_request.from_user.last_name }} {{f_request.from_user.first_name}}
+                                        {% else %}
+                                        {{ f_request.from_user.username }}
+                                        {% endif %}
+                                    </a>
+                                </td>
+                                <td>
+                                    {{f_request.from_user.profile.birthday}}
+                                </td>
+                                <td>
+                                    {{f_request.from_user.profile.website}}
+                                </td>
+                                <td>
+                                    {{f_request.from_user.profile.gender}}
+                                </td>
+                                <td>
+                                    <b>Native:</b><br>
+                                    {% for x in f_request.from_user.profile.get_native_languages%}
+                                    <p>{{x.language}}
+                                    <p>
+                                        {%endfor%}
+                                        <b>Learning:</b>
+                                        {% for x in f_request.from_user.profile.get_learning_languages%}
+                                    <p>{{x.language}}
+                                    <p>
+                                    {%endfor%}
+                                </td>
+                                <td>
+                                    <div>
+                                    <form method="post" class="action-form" action="{% url 'friendship_accept' f_request.pk %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="next" value="friendship_friends_list" />
+                                        <input type="submit" class="btn btn-success" value="accept"/>
+                                    </form>
+
+                                    <form method="post" class="action-form" action="{% url 'friendship_reject' f_request.pk %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="next" value="friendship_friends_list" />
+                                        <input type="submit" class="btn btn-danger" value="reject"/>
+                                    </form>
+
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     {% endif %}
     {% if friend_list %}
     <div class="row">
-        <table class="table">
+        <h2>Friends</h2>
+        <table class="table table-bordered">
             <thead>
             <tr>
                 <th>Name</th>
@@ -28,14 +94,24 @@
                 <th>Website</th>
                 <th>Gender</th>
                 <th>LastLogin</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
             {% for friend in friend_list %}
             <tr>
                 <td>
+                    <img src="{{ MEDIA_URL }}{{friend.profile.picture}}" alt=""
+                         width="150"
+                         height="150"
+                         alt="{{friend.username}}">
+
                     <a href="{% url 'profile'  friend.username %}">
-                        {{ friend.username }}
+                        {% if friend.last_name %}
+                           {{ friend.last_name }} {{friend.first_name}}
+                        {% else %}
+                           {{ friend.username }}
+                        {% endif %}
                     </a>
                 </td>
                 <td>
@@ -49,6 +125,13 @@
                 </td>
                 <td>
                     {{friend.profile.last_login}}
+                </td>
+                <td>
+                    <form class="action-form" action="{% url 'friendship_remove' friend.username %}" method="post">
+                         {% csrf_token %}
+                          <input type="hidden" name="next" value="friendship_friends_list" />
+                         <input type="submit" value="Remove" class="btn btn-warning">
+                     </form>
                 </td>
             </tr>
             {% endfor %}

@@ -21,7 +21,7 @@
 
 
     <!-- Custom styles for this template -->
-    <!-- <link href="{% static 'main/css/dashboard.css' %}" rel="stylesheet">
+    <link href="{% static 'main/css/speakntime.css' %}" rel="stylesheet">
 
        <!-- JQuery js --->
     <script src="{% static 'jquery/jquery-3.2.1.min.js' %}"></script>
@@ -46,17 +46,18 @@
             <ul class="nav navbar-nav">
                 {% if user.is_authenticated %}
                 <li>
-                    <a class="nav-link" href="{% url 'search'%}">Search</a>
+                    <a class="nav-link" href="{% url 'search'%}">Search </a>
                 </li>
                 <li>
-                    <a class="nav-link" href="{% url 'friendship_view_friends' user.username%}">Friends</a>
+                    <a class="nav-link" href="{% url 'friendship_friends_list' user.username%}">
+                      Friends {% if requests_count %}<span class="badge badge-danger">{{requests_count}}</span>{% endif %}</a>
                 </li>
                 {% endif %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if user.is_authenticated %}
                 <li>
-                    <a class="nav-link" href="{% url 'profile' user.username %}">{{user.username}}</a>
+                    <a class="nav-link" href="{% url 'profile' user.username %}">{{user.username}} #{{user.id}}</a>
                 </li>
                 <li>
                     <a class="nav-link" href="{% url 'logout' %}">Log out</a>

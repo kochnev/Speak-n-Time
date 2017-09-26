@@ -9,7 +9,7 @@
 <div class="container">
 
     <div class="row">
-        <h2>{{selecteduser.first_name}} {{selecteduser.last_name}}</h2>
+        <h2>{{selecteduser.first_name}} {{selecteduser.last_name}} ({{selecteduser.username}} #{{selecteduser.id}})</h2>
     </div>
     <div class="row">
         <div class="col-md-3">
@@ -24,18 +24,41 @@
             <a class="btn btn-default" href="{% url 'my_schedule' user.username%}">Edit schedule</a>
             <br><br>
             {% else %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-danger">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
             {% are_friends selecteduser user as is_friend%}
-            {% get_friendship_request_id selecteduser user as friendship_request_id%}
-            {% if friendship_request_id %}
-             <form action="{% url 'friendship_cancel' friendship_request_id selecteduser.username%}" method="post">
+            {% get_friendship_request_id selecteduser user as sent_friendship_request_id%}
+            {% get_friendship_request_id user selecteduser as friendship_request_id%}
+            {% if sent_friendship_request_id %}
+             <form action="{% url 'friendship_cancel' sent_friendship_request_id selecteduser.username%}" method="post">
                  {% csrf_token %}
                  <input type="submit" value="Cancel friend request" class="btn btn-danger">
             </form>
-            {% elif is_friend == False %}
-            <form action="{% url 'friendship_create_request' selecteduser.username %}" method="post">
-                 {% csrf_token %}
-                <input type="submit" value="Add to friend" class="btn btn-success">
-            </form>
+            {% elif friendship_request_id%}
+                    <form method="post" class="action-form" action="{% url 'friendship_accept' friendship_request_id %}">
+                        {% csrf_token %}
+                        <input type="submit" class="btn btn-success" value="accept"/>
+                    </form>
+
+                    <form method="post" class="action-form" action="{% url 'friendship_reject' friendship_request_id %}">
+                        {% csrf_token %}
+                        <input type="submit" class="btn btn-danger" value="reject"/>
+                    </form>
+            {% else %}
+               {% if is_friend == False %}
+                    <form class="action-form" action="{% url 'friendship_create_request' selecteduser.username %}" method="post">
+                         {% csrf_token %}
+                        <input type="submit" value="Add to friend" class="btn btn-success">
+                    </form>
+               {% else %}
+                     <form class="action-form" action="{% url 'friendship_remove' selecteduser.username %}" method="post">
+                         {% csrf_token %}
+                         <input type="submit" value="Remove from friends" class="btn btn-warning">
+                     </form>
+               {% endif %}
             {% endif %}
             {% endif %}
         </div>

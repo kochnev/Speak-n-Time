@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 from django.contrib.auth.models import User
 from django.utils import  timezone
 from django.core.exceptions import ValidationError
@@ -8,13 +9,14 @@ from friendship.exceptions import AlreadyFriendsError
 class FriendshipRequestManager(models.Manager):
     """ Friendshiprequest manager """
 
-    def active_requests(self, user):
+    def requests(self, user):
         """ Return a list of friendship requests """
         qs = FriendshipRequest.objects.select_related('from_user', 'to_user').filter(rejected__isnull=True).\
             filter(to_user=user).all()
         requests = list(qs)
 
         return requests
+
 
     def get_friendship_request_id(self, to_user, from_user):
         """Is there friend request between user1 and user2"""
@@ -25,14 +27,14 @@ class FriendshipRequestManager(models.Manager):
             return None
 
 
-
-
     def sent_requests(self, user):
         """ Return a list of friendship requests from user """
         qs = FriendshipRequest.objects.select_related('from_user', 'to_user').filter(from_user=user).all()
         requests = list(qs)
 
         return requests
+
+
 
 class FriendshipManager(models.Manager):
     """ Friendship manager """
@@ -69,6 +71,22 @@ class FriendshipManager(models.Manager):
             request.save()
 
         return request
+
+    def remove_friend(self, from_user, to_user):
+        """ Destroy a friendship relationship """
+        try:
+            qs = Friendship.objects.filter(
+                Q(to_user=to_user, from_user=from_user) |
+                Q(to_user=from_user, from_user=to_user)
+            ).distinct().all()
+
+            if qs:
+                qs.delete()
+                return True
+            else:
+                return False
+        except Friendship.DoesNotExist:
+            return False
 
     def are_friends(self, user1, user2):
         """ Are these two users friends? """
@@ -140,8 +158,10 @@ class FriendshipRequest(models.Model):
 
     def reject(self):
         """ reject this friendship request """
-        self.rejected = timezone.now()
-        self.save()
+        #self.rejected = timezone.now()
+        #self.save()
+
+        self.delete()
 
     def cancel(self):
         """ cancel this friendship request """
