@@ -5,20 +5,37 @@
 {% endblock %}
 
 {% block content %}
-   <div class="container">
-       {% if user.is_authenticated %}
-          <h1>Hello, {{ user.username}}!</h1>
-       {% else %}
-          <h1>Hello, whoever you are!!!</h1>
-       {% endif %}
-       <!--<ul>
-          <li>Количество пользователей: {{num_users}}</li>
-       </ul>
-       <p>You have visited this page {{ num_visits }}{% if num_visits == 1 %} time{% else %} times{% endif %}.</p>
-       <button class="btn btn-primary" id="mybtn">
-          CLICK TEST
-       </button>
-       <input type="date"></input>-->
-   </div>
+<div class="container">
+    {% if user.is_authenticated %}
+    <h1>Hello, {{ user.username}}!</h1>
+    {% else %}
+    <h1>Hello, whoever you are!!!</h1>
+    {% endif %}
 
+  <select id="myselect" style="width:621px;" class="js-example-data-ajax"></select>
+</div>
+
+<script type="text/javascript">
+   $('.js-example-data-ajax').select2({
+        placeholder: "Select a user",
+        minimumInputLength: 2,
+        allowClear: true,
+        ajax: {
+        url: '/api/get_users/',
+        dataType: 'json',
+        processResults: function (data) {
+            return {
+                results: $.map(data, function (item) {
+                    return {
+                        text: item.username,
+                        id: item.id
+                    }
+                })
+            };
+        }
+
+        // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+        }
+      });
+</script>
 {% endblock %}

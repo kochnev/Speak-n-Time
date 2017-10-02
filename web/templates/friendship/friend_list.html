@@ -7,81 +7,147 @@
 {% block content %}
 
 <div class="container">
+    <div class="row">
+        {% if sent_requests %}
+        <a href="#demo" class="btn btn-info" data-toggle="collapse">Sent requests</a>
+        <div id="demo" class="collapse">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Birthday</th>
+                    <th>Website</th>
+                    <th>Gender</th>
+                    <th>LastLogin</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for f_request in sent_requests %}
+                <tr>
+                    <td>
+                        <img src="{{ MEDIA_URL }}{{f_request.to_user.profile.picture}}" alt=""
+                             width="150"
+                             height="150"
+                             alt="{{f_request.to_user.username}}">
 
+                        <a href="{% url 'profile'  f_request.to_user.username %}">
+                            {% if f_request.to_user.last_name %}
+                            {{ f_request.to_user.last_name }} {{f_request.to_user.first_name}}
+                            {% else %}
+                            {{ f_request.to_user.username }}
+                            {% endif %}
+                        </a>
+                    </td>
+                    <td>
+                        {{f_request.to_user.profile.birthday}}
+                    </td>
+                    <td>
+                        {{f_request.to_user.profile.website}}
+                    </td>
+                    <td>
+                        {{f_request.to_user.profile.gender}}
+                    </td>
+                    <td>
+                        <b>Native:</b><br>
+                        {% for x in f_request.to_user.profile.get_native_languages%}
+                        <p>{{x.language}}
+                        <p>
+                            {%endfor%}
+                            <b>Learning:</b>
+                            {% for x in f_request.to_user.profile.get_learning_languages%}
+                        <p>{{x.language}}
+                        <p>
+                            {%endfor%}
+                    </td>
+                    <td>
+                        <form method="post" class="action-form" action="{% url 'friendship_cancel' f_request.pk f_request.to_user.username %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="friendship_friends_list"/>
+                            <input type="submit" class="btn btn-danger" value="cancel"/>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+         </div>
+         {% endif %}
+    </div>
     {% if requests %}
-        <div class="row">
-            <div class="panel panel-info">
-                <div class="panel-heading">Friend requests</div>
-                <table class="table table-bordered">
-                    <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Birthday</th>
-                        <th>Website</th>
-                        <th>Gender</th>
-                        <th>LastLogin</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                       {% for f_request in requests %}
-                            <tr>
-                                <td>
-                                    <img src="{{ MEDIA_URL }}{{f_request.from_user.profile.picture}}" alt=""
-                                         width="150"
-                                         height="150"
-                                         alt="{{f_request.from_user.username}}">
+    <div class="row">
+        <div class="panel panel-info">
+            <div class="panel-heading">Friend requests</div>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Birthday</th>
+                    <th>Website</th>
+                    <th>Gender</th>
+                    <th>LastLogin</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for f_request in requests %}
+                <tr>
+                    <td>
+                        <img src="{{ MEDIA_URL }}{{f_request.from_user.profile.picture}}" alt=""
+                             width="150"
+                             height="150"
+                             alt="{{f_request.from_user.username}}">
 
-                                    <a href="{% url 'profile'  f_request.from_user.username %}">
-                                        {% if f_request.from_user.last_name %}
-                                        {{ f_request.from_user.last_name }} {{f_request.from_user.first_name}}
-                                        {% else %}
-                                        {{ f_request.from_user.username }}
-                                        {% endif %}
-                                    </a>
-                                </td>
-                                <td>
-                                    {{f_request.from_user.profile.birthday}}
-                                </td>
-                                <td>
-                                    {{f_request.from_user.profile.website}}
-                                </td>
-                                <td>
-                                    {{f_request.from_user.profile.gender}}
-                                </td>
-                                <td>
-                                    <b>Native:</b><br>
-                                    {% for x in f_request.from_user.profile.get_native_languages%}
-                                    <p>{{x.language}}
-                                    <p>
-                                        {%endfor%}
-                                        <b>Learning:</b>
-                                        {% for x in f_request.from_user.profile.get_learning_languages%}
-                                    <p>{{x.language}}
-                                    <p>
-                                    {%endfor%}
-                                </td>
-                                <td>
-                                    <div>
-                                    <form method="post" class="action-form" action="{% url 'friendship_accept' f_request.pk %}">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="next" value="friendship_friends_list" />
-                                        <input type="submit" class="btn btn-success" value="accept"/>
-                                    </form>
+                        <a href="{% url 'profile'  f_request.from_user.username %}">
+                            {% if f_request.from_user.last_name %}
+                            {{ f_request.from_user.last_name }} {{f_request.from_user.first_name}}
+                            {% else %}
+                            {{ f_request.from_user.username }}
+                            {% endif %}
+                        </a>
+                    </td>
+                    <td>
+                        {{f_request.from_user.profile.birthday}}
+                    </td>
+                    <td>
+                        {{f_request.from_user.profile.website}}
+                    </td>
+                    <td>
+                        {{f_request.from_user.profile.gender}}
+                    </td>
+                    <td>
+                        <b>Native:</b><br>
+                        {% for x in f_request.from_user.profile.get_native_languages%}
+                        <p>{{x.language}}
+                        <p>
+                            {%endfor%}
+                            <b>Learning:</b>
+                            {% for x in f_request.from_user.profile.get_learning_languages%}
+                        <p>{{x.language}}
+                        <p>
+                            {%endfor%}
+                    </td>
+                    <td>
+                        <div>
+                            <form method="post" class="action-form" action="{% url 'friendship_accept' f_request.pk %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="next" value="friendship_friends_list"/>
+                                <input type="submit" class="btn btn-success" value="accept"/>
+                            </form>
 
-                                    <form method="post" class="action-form" action="{% url 'friendship_reject' f_request.pk %}">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="next" value="friendship_friends_list" />
-                                        <input type="submit" class="btn btn-danger" value="reject"/>
-                                    </form>
+                            <form method="post" class="action-form" action="{% url 'friendship_reject' f_request.pk %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="next" value="friendship_friends_list"/>
+                                <input type="submit" class="btn btn-danger" value="reject"/>
+                            </form>
 
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
+    </div>
     {% endif %}
     {% if friend_list %}
     <div class="row">
@@ -108,9 +174,9 @@
 
                     <a href="{% url 'profile'  friend.username %}">
                         {% if friend.last_name %}
-                           {{ friend.last_name }} {{friend.first_name}}
+                        {{ friend.last_name }} {{friend.first_name}}
                         {% else %}
-                           {{ friend.username }}
+                        {{ friend.username }}
                         {% endif %}
                     </a>
                 </td>
@@ -128,10 +194,10 @@
                 </td>
                 <td>
                     <form class="action-form" action="{% url 'friendship_remove' friend.username %}" method="post">
-                         {% csrf_token %}
-                          <input type="hidden" name="next" value="friendship_friends_list" />
-                         <input type="submit" value="Remove" class="btn btn-warning">
-                     </form>
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="friendship_friends_list"/>
+                        <input type="submit" value="Remove" class="btn btn-warning">
+                    </form>
                 </td>
             </tr>
             {% endfor %}

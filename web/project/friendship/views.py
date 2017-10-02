@@ -47,21 +47,26 @@ def friendship_reject(request, friendship_request_id):
             request.user.friendship_requests_received,
             id=friendship_request_id)
         f_request.reject()
-        return redirect('friendship_view_friends', username=request.user.username)
+        return redirect('friendship_friends_list', username=request.user.username)
 
 
 @login_required
 def friendship_cancel(request, friendship_request_id, to_username):
     """ Cancel a previously created friendship_request_id """
     if request.method == 'POST':
+        next = request.POST.get('next')
         f_request = get_object_or_404(
             request.user.friendship_requests_sent,
             id=friendship_request_id)
         f_request.cancel()
 
-    return redirect('profile', to_username)
+        if next == 'friendship_friends_list':
+            return redirect('friendship_friends_list', username=request.user.username)
+        else:
+            return redirect('profile', username=to_username)
 
-        #return redirect('friendship_requests_detail', friendship_request_id=friendship_request_id)
+
+            #return redirect('friendship_requests_detail', friendship_request_id=friendship_request_id)
 
 
 @login_required
@@ -76,7 +81,7 @@ def friendship_remove(request, to_username):
             return redirect('friendship_friends_list', username=request.user.username)
         else:
             return redirect('profile', username=to_username)
-   
+
 
 @login_required
 def friendship_friends_list(request, username):
@@ -84,7 +89,7 @@ def friendship_friends_list(request, username):
     selected_user = get_object_or_404(User, username=username)
     list_of_friends = Friendship.objects.friends(selected_user)
     requests = FriendshipRequest.objects.requests(selected_user)
-
+    sent_requests = FriendshipRequest.objects.sent_requests(selected_user)
     return render(
         request,
         'friendship/friend_list.html',
@@ -92,6 +97,7 @@ def friendship_friends_list(request, username):
             'selected_user': selected_user,
             'friend_list': list_of_friends,
             'requests': requests,
+            'sent_requests': sent_requests
         }
     )
 

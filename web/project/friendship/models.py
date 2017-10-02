@@ -29,7 +29,7 @@ class FriendshipRequestManager(models.Manager):
 
     def sent_requests(self, user):
         """ Return a list of friendship requests from user """
-        qs = FriendshipRequest.objects.select_related('from_user', 'to_user').filter(from_user=user).all()
+        qs = FriendshipRequest.objects.select_related('from_user', 'to_user').filter(from_user=user, rejected__isnull=True).all()
         requests = list(qs)
 
         return requests
