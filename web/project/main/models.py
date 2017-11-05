@@ -1,17 +1,26 @@
+import pytz
+from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
-from django.contrib.auth.models import User
 from django.utils import timezone
-import pytz
 
 
 class Language(models.Model):
 
     name = models.CharField(max_length=50)
-    code = models.CharField(max_length=2)
+    code = models.CharField(max_length=5)
 
     def __str__(self):
         """ String for representing Language object """
+        return self.name
+
+class Country(models.Model):
+
+    name = models.CharField(max_length=50)
+    code = models.CharField(max_length=5)
+
+    def __str__(self):
+        """ String for representing Country object """
         return self.name
 
 

@@ -14,6 +14,7 @@ def search(request):
     user_profile = UserProfile.objects.get(user=user)
 
     #if len = 0 then search by default (rendering form and first auto search)
+    """
     if len(request.GET) == 0:
 
         #is_use_intersection = 'on'
@@ -31,12 +32,13 @@ def search(request):
                            'learning_language': learning_language,
                            })
     else:
-        gender = request.GET.get('gender')
-        is_use_intersection = request.GET.get('is_use_intersection')
-        native_language = request.GET.get('native_language')
-        learning_language = request.GET.get('learning_language')
+    """
+    gender = request.GET.get('gender')
+    is_use_intersection = request.GET.get('is_use_intersection')
+    native_language = request.GET.get('native_language')
+    learning_language = request.GET.get('learning_language')
 
-        form = SearchForm(request.GET)
+    form = SearchForm(request.GET)
 
 
     if is_use_intersection == 'on':

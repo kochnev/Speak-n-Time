@@ -11,8 +11,9 @@
     {% else %}
     <h1>Hello, whoever you are!!!</h1>
     {% endif %}
-
-  <select id="myselect" style="width:621px;" class="js-example-data-ajax"></select>
+    <div class="input-control" data-role="select">
+        <select id="myselect" style="width:621px;" class="js-example-data-ajax"></select>
+    </div>
 </div>
 
 <script type="text/javascript">
@@ -37,5 +38,6 @@
         // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
         }
       });
+
 </script>
 {% endblock %}

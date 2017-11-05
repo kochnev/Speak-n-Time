@@ -14,7 +14,7 @@
 
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
 
-    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css.map' %}">
+
 
     <!-- JQuery UI CSS ----------->
     <link rel="stylesheet" href="{% static 'jquery/jquery-ui-1.12.1.custom/jquery-ui.css' %}">
@@ -22,7 +22,6 @@
 
     <!-- Custom styles for this template -->
     <link href="{% static 'main/css/speakntime.css' %}" rel="stylesheet">
-    <link href="{% static 'main/css/spnt1.css' %}" rel="stylesheet">
 
        <!-- JQuery js --->
     <script src="{% static 'jquery/jquery-3.2.1.min.js' %}"></script>
@@ -118,6 +117,7 @@
 <script src="{% static 'main/js/main-jquery.js'%}"></script>
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="{% static 'bootstrap/assets/js/ie10-viewport-bug-workaround.js'%}"></script>
-
+{% block scripts %}
+{% endblock scripts %}
 </body>
 </html>

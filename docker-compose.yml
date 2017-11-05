@@ -26,9 +26,6 @@ services:
       - postgres
     env_file: .env
     command: bash -c "cd project &&
-                       python manage.py collectstatic --noinput &&
-                       python manage.py makemigrations &&
-                       python manage.py migrate &&
                        gunicorn --reload project.wsgi:application -w 2 -b 0.0.0.0:8000"
 
   postgres:
