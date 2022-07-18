@@ -17,6 +17,7 @@ services:
     build: ./web
     container_name: spnt01
     expose:
+
       - "8000"
     depends_on:
       - postgres
