@@ -26,7 +26,7 @@ services:
     links:
       - postgres
     env_file: .env
-    command: bash -c "cd project &&
+    command: bash -c " cd project &&
                        gunicorn --reload project.wsgi:application -w 2 -b 0.0.0.0:8000"
 
   postgres:

@@ -1,6 +1,6 @@
+psycopg2-binary
 Django==1.11.1
 gunicorn==19.7.1
-psycopg2==2.7.1
 Pillow
 
 
